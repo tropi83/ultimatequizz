@@ -25,7 +25,7 @@ public class QuizzRequest {
     private String description;
 
     @NotNull(message = "{quizz_is_active_not_empty}")
-    private Boolean isActive;m
+    private Boolean isActive;
 
     @NotNull(message = "{quizz_theme_id_not_empty}")
     private int theme_id;
