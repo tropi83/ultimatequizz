@@ -1,0 +1,59 @@
+<!-- Button -->
+<button
+    mat-icon-button
+    [matMenuTriggerFor]="userActions">
+    <span class="relative">
+        <img
+            class="w-7 h-7 rounded-full"
+            *ngIf="showAvatar && user"
+            [src]="user">
+        <mat-icon
+            *ngIf="!showAvatar || !user"
+            [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+        <span
+            class="absolute right-0 bottom-0 w-2 h-2 rounded-full mr-px mb-px bg-primary"
+        ></span>
+    </span>
+</button>
+
+<mat-menu
+    [xPosition]="'before'"
+    #userActions="matMenu">
+    <div *ngIf="user;else noUserLogin">
+
+        <button
+            mat-menu-item>
+            <mat-icon [svgIcon]="'heroicons_outline:user'"></mat-icon>
+            <span>{{ user?.email }}</span>
+        </button>
+        <mat-divider class="my-2"></mat-divider>
+        <button *ngIf="user && user.userRole === 'ADMIN'"
+            mat-menu-item
+            (click)="redirectToAdmin()">
+            <mat-icon [svgIcon]="'heroicons_solid:cog'"></mat-icon>
+            <span>Administration</span>
+        </button>
+        <button
+            mat-menu-item
+            (click)="redirectToSignOut()">
+            <mat-icon [svgIcon]="'heroicons_outline:logout'"></mat-icon>
+            <span>Se déconnecter</span>
+        </button>
+    </div>
+    <ng-template #noUserLogin>
+        <button
+            mat-menu-item
+            (click)="redirectToSignUp()">
+            <mat-icon [svgIcon]="'heroicons_solid:user-add'"></mat-icon>
+            <span>S'inscrire</span>
+        </button>
+        <button
+            mat-menu-item
+            (click)="redirectToSignIn()">
+            <mat-icon [svgIcon]="'heroicons_outline:login'"></mat-icon>
+            <span>Se connecter</span>
+        </button>
+    </ng-template>
+
+</mat-menu>
+

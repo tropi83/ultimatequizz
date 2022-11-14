@@ -1,0 +1,29 @@
+
+/* Smartphone && all (if no surcharged) */
+.quizz-card-size {
+    width: 480px;
+}
+/* Tablette */
+@media (min-width: 600px) {
+    .quizz-card-size {
+        width: 480px !important;
+    }
+}
+/* Petit ecran */
+@media (min-width: 960px) {
+    .quizz-card-size {
+        width: 650px !important;
+    }
+}
+/* Moyen ecran */
+@media (min-width: 1100px) {
+    .quizz-card-size {
+        width: 750px !important;
+    }
+}
+/* Grand écran */
+@media (min-width: 1780px) {
+    .quizz-card-size {
+        width: 850px !important;
+    }
+}

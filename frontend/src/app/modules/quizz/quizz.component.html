@@ -1,0 +1,217 @@
+
+<div *ngIf="question" class="flex flex-auto justify-center w-full max-w-10xl mx-auto p-6 sm:p-8 " >
+
+    <!-- Quizz Infos -->
+    <div *ngIf="quizz" class="hidden sm:block md:block lg:block lg:flex flex-col items-start mr-8">
+
+        <fuse-card class="flex flex-col max-w-80 w-full mt-6 p-8 shadow rounded-2xl bg-white dark:bg-opacity-5 dark:border"
+                   #expandableCard02="fuseCard">
+            <div class="text-2xl font-semibold leading-tight">{{ quizz && quizz.name ? quizz.name : '' }}</div>
+            <hr class="w-full border-t my-6">
+            <div class="flex flex-col">
+                <div class="flex items-center">
+                    <div
+                        class="py-0.5 px-3 rounded-full text-sm font-semibold flex"
+                        [ngClass]="{
+                            'text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500': quizz?.theme?.name === 'Géographie',
+                            'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500': quizz?.theme?.name === 'Culture Générale',
+                            'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500': quizz?.theme?.name === 'France',
+                            'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500': quizz?.theme?.name === 'Histoire',
+                            'text-zinc-800 bg-zinc-100 dark:text-zinc-50 dark:bg-zinc-500': quizz?.theme?.name === 'Divers',
+                            'text-lime-800 bg-lime-100 dark:text-lime-50 dark:bg-lime-500': quizz?.theme?.name === 'Vocabulaire',
+                            'text-violet-800 bg-violet-100 dark:text-violet-50 dark:bg-violet-500': quizz?.theme?.name === 'Politique',
+                            'text-rose-800 bg-rose-100 dark:text-rose-50 dark:bg-rose-500': quizz?.theme?.name === 'Sciences',
+                            'text-yellow-800 bg-yellow-100 dark:text-yellow-50 dark:bg-yellow-500': quizz?.theme?.name === 'Marques & logo',
+                            'text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500': quizz?.theme?.name === 'Actualité'
+                            }">
+                        <mat-icon class="icon-size-4 pt-2" svgIcon="heroicons_solid:tag"></mat-icon>
+                        <div class="ml-2 font-medium leading-6">{{ quizz?.theme?.name }}</div>
+                    </div>
+                </div>
+                <div class="flex items-center mt-4">
+                    <mat-icon
+                        class="icon-size-5 mr-3"
+                        [svgIcon]="'heroicons_outline:collection'"></mat-icon>
+                    <span class="leading-none">{{ quizz && quizz.questions ? quizz.questions.length : 0 }} questions</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <mat-icon
+
+                        class="icon-size-5 mr-3"
+                        [svgIcon]="'iconsmind:trophy'"></mat-icon>
+                    <span class="leading-none">{{ quizz && quizz.like ? quizz.like + ' points' : '0 points' }}</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <mat-icon
+                        class="icon-size-5 mr-3"
+                        [svgIcon]="'heroicons_solid:thumb-up'"></mat-icon>
+                    <span class="leading-none">{{ quizz && quizz.like ? quizz.like + ' likes' : '0 like' }}</span>
+                </div>
+                <div class="flex items-center mt-4 border-b pb-4">
+                    <mat-icon
+                        class="icon-size-5 mr-3"
+                        [svgIcon]="'heroicons_outline:calendar'"></mat-icon>
+                    <span class="leading-none">{{ quizz && quizz.creationDate | date: 'dd/MM/yyyy' }}</span>
+                </div>
+            </div>
+            <button
+                *ngIf="quizzIsStarted"
+                class="px-6 mt-8"
+                mat-flat-button
+                [color]="'primary'"
+                (click)=" resetCountDown(); startQuizzGame(); ">
+                Score: {{ points }}
+            </button>
+            <button
+                *ngIf="quizzIsStarted === false"
+                (click)="resetCountDown(); startQuizzGame()"
+                class="px-6 mt-8"
+                mat-flat-button
+                [color]="'primary'">
+                <mat-icon
+                    class="icon-size-5 mr-2"
+                    [svgIcon]="'heroicons_solid:play'"></mat-icon>
+                Lancer le quizz
+            </button>
+
+        </fuse-card>
+
+    </div>
+
+    <!-- Quizz Description -->
+    <div  *ngIf="quizzIsStarted === false" class="flex flex-col items-center mt-4">
+        <div class="w-full max-w-3xl">
+            <div class="max-w-none mx-auto prose prose-sm mt-4">
+                <h1>{{ quizz && quizz.name ? quizz.name : '' }}</h1>
+                <p class="mt-4" style="white-space: pre-wrap;">
+                    {{ quizz && quizz.description ? quizz.description : '' }}
+                </p>
+            </div>
+            <div>
+                <a
+                    class="mt-8"
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="startQuizzGame()">
+                    <span>Lancer le quizz</span>
+                    <mat-icon
+                        class="ml-2 icon-size-5"
+                        [svgIcon]="'heroicons_solid:arrow-narrow-right'"></mat-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quizz -->
+    <div *ngIf="quizzIsStarted === true" class="mt-2" id="question-section">
+
+        <div *ngIf="countDownIsStarted === true" class="w-full mt-4 text-lg font-medium text-center quizz-card-size">
+            Pret ?
+            <h1 class="ml4">
+                <span class="letters letters-1">3</span>
+                <span class="letters letters-2">2</span>
+                <span class="letters letters-3">1</span>
+                <span class="letters letters-4">GO !</span>
+            </h1>
+        </div>
+
+        <div *ngIf="countDownIsStarted === false">
+            <!-- Progress Bar -->
+            <div class="w-full mt-4 text-lg font-medium text-center">
+                <app-progress-bar progress="{{ progress }}">
+                </app-progress-bar>
+            </div>
+
+            <!-- Question card -->
+            <fuse-card style="margin: auto;" class="flex flex-col max-w-200 w-full mt-8 shadow rounded-2xl bg-white dark:bg-opacity-5 dark:border quizz-card-size" #expandableCard02="fuseCard">
+                <div class="flex items-center mx-6 sm:mx-8 mt-4 mb-1 border-b pb-6">
+                    <!-- Question position -->
+                    <div class="rounded-full">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full overflow-hidden ring-4 ring-bg-card">
+                            <div
+                                class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-2xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                                *ngIf="question.position">
+                                {{ question.position }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question label -->
+                    <div class="w-full text-lg font-medium text-center">{{question.label}}</div>
+
+                </div>
+
+                <!-- Response after anwser -->
+                <div class="w-full text-lg font-medium text-center">
+                    <div class="w-1/3"></div>
+                    <div *ngIf="pause"
+                         class="flex flex-0 w-1/3 items-center justify-center sm:mr-4 mt-2"
+                         [ngClass]="{
+                        'text-primary-600 bg-primary-100 dark:text-primary-50 dark:bg-primary-600': success && progress === 100,
+                        'text-green-500 bg-green-100 dark:text-green-50 dark:bg-green-500': success && progress !== 100,
+                        'text-red-600 bg-red-100 dark:text-red-50 dark:bg-red-600': !success
+                    }">
+                        <h2 *ngIf="success && progress!==100" id="feedback-success">Correcte !</h2>
+                        <h2 *ngIf="!success" id="feedback-fail">Mauvaise réponse !</h2>
+                        <h2 *ngIf="success && progress===100" id="feedback-win">Vous avez gagné !</h2>
+                    </div>
+                    <div class="w-1/3"></div>
+
+                    <!-- Answsers -->
+                    <div class="mb-4" id="option-section">
+                        <div class="flex flex-col sm:flex-row p-8">
+                            <div class="flex flex-auto flex-wrap" >
+                                <div class="flex-col md:grid md:gap-2 md:grid-cols-2 md:gap-2 w-full">
+                                    <div *ngFor='let answer of answers; index as i' >
+                                        <button style="min-width: 300px; max-width: 300px;min-height: 50px;"
+                                                class="relative max-w-3/4 px-3 py-2 rounded-lg bg-blue-500 text-blue-50 mt-2 mb-2"
+                                                (click)="displayAnswer(i)" id="option" type="button"
+                                                [ngClass]="pause? 'text-accent-600 bg-accent-100 dark:text-accent-50 dark:bg-accent-600 cursor-default' : ''"
+                                                [ngClass]="pause && i == correctPosition? 'text-green-500 bg-green-100 dark:text-green-50 dark:bg-green-500 cursor-default' : 'bg-blue-500 text-blue-50'"
+                                                [ngClass]="pause && (answerPosition!=correctPosition && i == answerPosition)? 'text-red-600 bg-red-100 dark:text-red-50 dark:bg-red-600 cursor-default' : 'bg-blue-500 text-blue-50'"
+                                        >
+                                            {{ answer.label }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next button -->
+                    <div *ngIf="pause" id="next-section" class="text-right">
+                        <button
+                            class="mb-6 mt-2" style="right: 30px;"
+                            mat-stroked-button
+                            (click)="goNext()">
+                            <span class="inline-flex items-center">
+                                <ng-container>
+                                    <span>Suivant</span>
+                                </ng-container>
+                                <mat-icon
+                                    class="ml-1.5 icon-size-5"
+                                    [svgIcon]="'heroicons_solid:arrow-sm-right'">
+                                </mat-icon>
+                            </span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </fuse-card>
+
+        </div>
+    </div>
+
+    <!-- Close button -->
+        <button
+            class="ml-4"
+            mat-icon-button
+            [matTooltip]="'Fermer'"
+            (click)="backToQuizzList()">
+            <mat-icon
+                class="text-white"
+                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+
+</div>
