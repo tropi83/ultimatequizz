@@ -93,6 +93,18 @@ public class QuizzServiceImpl implements QuizzService {
 	}
 
 	@Override
+	public List<Quizz> getQuizzsAsc() {
+
+		return quizzRepository.findAllByOrderByCreationDateAsc();
+	}
+
+	@Override
+	public List<Quizz> getQuizzsDesc() {
+
+		return quizzRepository.findAllByOrderByCreationDateDesc();
+	}
+
+	@Override
 	public List<Quizz> getQuizzsByTheme(Optional<Theme> theme) {
 
 		return quizzRepository.findByTheme(theme);

@@ -69,8 +69,8 @@ VALUES (
 
 Ce quiz est le second de notre série relative aux monnaies du monde. Vous pouvez voir la première salve de questions avec le lien présent sous ce quiz.',
            true,
-           '2022-11-12',
-           '2022-11-12',
+           '2022-11-11',
+           '2022-11-11',
            1
        );
 
@@ -93,8 +93,8 @@ VALUES (
 
 Ce quiz de culture générale facile vous permet de tester vos connaissances sans trop se prendre la tête. Pour monter un peu le niveau, pensez à vous mesurer à nos quiz niveau moyen ou même niveau difficile pour un défi d''un autre ordre. Bonne chance à tous.',
            true,
-           '2022-11-12',
-           '2022-11-12',
+           '2022-11-13',
+           '2022-11-13',
            2
        );
 
@@ -105,8 +105,8 @@ VALUES (
 
 Si vous possédez un compte sur Culture Quizz, alors votre score final sera converti en point pour le grand classement général des meilleurs joueurs de la semaine. Bon quiz d''orthographe à tous.',
            true,
-           '2022-11-13',
-           '2022-11-13',
+           '2022-11-14',
+           '2022-11-14',
            6
        );
 
@@ -224,5 +224,11 @@ INSERT INTO answers(label, is_correct, question_id) VALUES ('Revolver', false, 2
 INSERT INTO answers(label, is_correct, question_id) VALUES ('Moelle', false, 20);
 INSERT INTO answers(label, is_correct, question_id) VALUES ('Pediatre', true, 20);
 INSERT INTO answers(label, is_correct, question_id) VALUES ('Prescription', false, 20);
+
+/*
+ * Insertion des historiques de mes couilles
+ */
+INSERT INTO history VALUES (1, 20 , 1 , 1);
+INSERT INTO history VALUES (2 ,10 , 2, 1);
 
 

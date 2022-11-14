@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 @Slf4j
@@ -64,6 +65,11 @@ public class UserServiceImpl implements UserService {
 		final User user = findByUsername(username);
 
 		return UserMapper.INSTANCE.convertToAuthenticatedUserDto(user);
+	}
+
+	@Override
+	public Optional<User> getUserById(int id) {
+		return userRepository.findById(id);
 	}
 
 }

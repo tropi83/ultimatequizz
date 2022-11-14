@@ -15,6 +15,8 @@ public interface QuizzService {
 	QuizzResponse updateQuizz(int id, QuizzRequest quizzRequest);
 
 	List<Quizz> getQuizzs();
+	List<Quizz> getQuizzsAsc();
+	List<Quizz> getQuizzsDesc();
 
 	List<Quizz> getQuizzsByTheme(Optional<Theme> theme);
 

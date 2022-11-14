@@ -41,6 +41,18 @@ public class QuizzController {
         return this.quizzService.getQuizzs();
     }
 
+    @GetMapping("quizzs/asc")
+    public List<Quizz> getQuizzsAsc() {
+
+        return this.quizzService.getQuizzsAsc();
+    }
+
+    @GetMapping("quizzs/desc")
+    public List<Quizz> getQuizzsDesc() {
+
+        return this.quizzService.getQuizzsDesc();
+    }
+
     @GetMapping("quizzs/theme/{id}")
     public ResponseEntity<List<Quizz>> getQuizzsByTheme(@PathVariable("id") int id) {
 

@@ -13,5 +13,9 @@ public interface QuizzRepository extends JpaRepository<Quizz, Integer> {
     public boolean existsByName(String name);
 
     List<Quizz> findByTheme(Optional<Theme> theme);
+
+    List<Quizz> findAllByOrderByCreationDateAsc();
+
+    List<Quizz> findAllByOrderByCreationDateDesc();
 }
 
