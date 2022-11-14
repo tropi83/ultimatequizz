@@ -8,17 +8,37 @@
 
 Périmètre de l'application:
 
+
 Technologies:
 - Java Spring Boot 2.3.3
 - PostgreSQL 11.11
+- NodeJS 16.15.0
 - Angular 13.1.1
+
+
+## Prérequis
+Installer NodeJs, Npm et Angular
+- Windows
+``` bash
+https://nodejs.org/fr/download/
+npm install –g @angular/cli
+``` 
+- Linux
+``` bash
+sudo apt install nodejs npm
+npm install –g @angular/cli
+``` 
+
+Installer Java 17
+``` bash
+https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html
+```
 
 ## Installation
 Compiler et lancer le projet sous java 17
 
-Installer NodeJs & Angular
+Angular:
 ```
-sudo apt install nodejs npm
 cd ./frontend && npm install && npm run start
 ```
 
