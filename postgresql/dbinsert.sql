@@ -279,39 +279,39 @@ INSERT INTO answers(id, label, is_correct, question_id) VALUES (97,  'Le Bonnet 
  * Insertion des historiques de mes couilles
  * (mais c'est propasse au moins !!!! )
  */
-INSERT INTO history VALUES (1, '2022-11-12', 20, 100.12, 1, 1);
-INSERT INTO history VALUES (2, '2022-11-14', 10,   62.2, 2, 1);
-INSERT INTO history VALUES (3, '2022-11-13', 10,  250.3, 3, 1);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (1, '2022-11-12', 20, 100.12, 1, 1);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (2, '2022-11-14', 10,   62.2, 2, 1);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (3, '2022-11-13', 10,  250.3, 3, 1);
 
-INSERT INTO history VALUES (4, '2022-11-12', 20, 140.44, 1, 2);
-INSERT INTO history VALUES (5, '2022-11-13', 10,  62.21, 2, 2);
-INSERT INTO history VALUES (6, '2022-11-14', 10,  42.12, 3, 2);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (4, '2022-11-12', 20, 140.44, 1, 2);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (5, '2022-11-13', 10,  62.21, 2, 2);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (6, '2022-11-14', 10,  42.12, 3, 2);
 
-INSERT INTO history VALUES (7, '2022-11-13', 20, 240.44, 1, 3);
-INSERT INTO history VALUES (8, '2022-11-11', 10, 240.44, 2, 3);
-INSERT INTO history VALUES (9, '2022-11-13', 10, 340.44, 3, 3);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (7, '2022-11-13', 20, 240.44, 1, 3);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (8, '2022-11-11', 10, 240.44, 2, 3);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (9, '2022-11-13', 10, 340.44, 3, 3);
 
-INSERT INTO history VALUES (10, '2022-11-11', 20, 540.33, 1, 4);
-INSERT INTO history VALUES (11, '2022-11-12', 10,  40.24, 2, 4);
-INSERT INTO history VALUES (12, '2022-11-13', 10, 240.11, 3, 4);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (10, '2022-11-11', 20, 540.33, 1, 4);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (11, '2022-11-12', 10,  40.24, 2, 4);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (12, '2022-11-13', 10, 240.11, 3, 4);
 
-INSERT INTO history VALUES (13, '2022-11-11', 20, 5140.13, 1, 5);
-INSERT INTO history VALUES (14, '2022-11-12', 10,  340.03, 2, 5);
-INSERT INTO history VALUES (15, '2022-11-16', 10,  240.33, 3, 5);
-INSERT INTO history VALUES (16, '2022-11-15', 10,  740.43, 4, 5);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (13, '2022-11-11', 20, 5140.13, 1, 5);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (14, '2022-11-12', 10,  340.03, 2, 5);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (15, '2022-11-16', 10,  240.33, 3, 5);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (16, '2022-11-15', 10,  740.43, 4, 5);
 
-INSERT INTO history VALUES (17, '2022-11-15', 20, 510.13, 1, 6);
-INSERT INTO history VALUES (18, '2022-11-12', 10, 340.03, 2, 6);
-INSERT INTO history VALUES (19, '2022-11-14', 10, 740.43, 4, 6);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (17, '2022-11-15', 20, 510.13, 1, 6);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (18, '2022-11-12', 10, 340.03, 2, 6);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (19, '2022-11-14', 10, 740.43, 4, 6);
 
-INSERT INTO history VALUES (20, '2022-11-15', 20, 40.13, 1, 7);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (20, '2022-11-15', 20, 40.13, 1, 7);
 
-INSERT INTO history VALUES (21, '2022-11-11', 20,  540.13, 2, 8);
-INSERT INTO history VALUES (22, '2022-11-16', 10, 1240.33, 3, 8);
-INSERT INTO history VALUES (23, '2022-11-15', 10, 1040.43, 5, 8);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (21, '2022-11-11', 20,  540.13, 2, 8);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (22, '2022-11-16', 10, 1240.33, 3, 8);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (23, '2022-11-15', 10, 1040.43, 5, 8);
 
-INSERT INTO history VALUES (24, '2022-11-11', 20, 5140.13, 1, 9);
-INSERT INTO history VALUES (25, '2022-11-16', 10,  540.33, 5, 9);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (24, '2022-11-11', 20, 5140.13, 1, 9);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (25, '2022-11-16', 10,  540.33, 5, 9);
 
-INSERT INTO history VALUES (26, '2022-11-11', 20, 622.13, 5, 10);
-INSERT INTO history VALUES (27, '2022-11-16', 10, 100.33, 5, 10);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (26, '2022-11-11', 20, 622.13, 5, 10);
+INSERT INTO history (id, creation_date, points, time, quizz_id, user_id) VALUES (27, '2022-11-16', 10, 100.33, 5, 10);
