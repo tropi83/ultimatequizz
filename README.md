@@ -19,8 +19,8 @@ Technologies:
 ## Prérequis
 Installer NodeJs, Npm et Angular
 - Windows
+Installer depuis https://nodejs.org/fr/download/
 ``` bash
-https://nodejs.org/fr/download/
 npm install –g @angular/cli
 ``` 
 - Linux
@@ -46,6 +46,6 @@ cd ./frontend && npm install && npm run start
 
 | Url      | Details   | Compte Dev| Mot de passe
 |----------|-----------|-----------|-----------|
-|http://localhost:4200| Frontend Angular|string|string
-|http://localhost:8080/swagger-ui.html| Swagger|
+|http://localhost:4200| Frontend Angular|alice|azerty
+|http://localhost:8080/swagger-ui.html| Swagger|string|string
 |http://localhost:8080/api| Api Java Spring|
