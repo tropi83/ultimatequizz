@@ -96,7 +96,7 @@ public class QuestionValidationService {
 
 		int trueAnswerCounter = 0;
 		for (Answer answer : questionRequest.getAnswers()) {
-			if (answer.getCorrect()){
+			if (answer.getIsCorrect()){
 				trueAnswerCounter = trueAnswerCounter + 1;
 			}
 		}

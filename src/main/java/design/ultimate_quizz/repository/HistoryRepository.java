@@ -11,7 +11,9 @@ import java.util.List;
 public interface HistoryRepository extends JpaRepository<History, Integer> {
     List<History> findAll();
 
-    List<History> findByUser(Optional<User> user);
+    List<History> findByUserOrderByCreationDateDesc(Optional<User> user);
+
+    List<History> findByUserAndQuizz(Optional<User> user, Optional<Quizz> quizz);
 
 
 }

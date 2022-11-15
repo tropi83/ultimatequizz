@@ -8,4 +8,5 @@ export interface User
     userRole: string;
     creationDate: string;
     historyQuizz: [];
+    description?: string;
 }

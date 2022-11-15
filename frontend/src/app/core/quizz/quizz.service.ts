@@ -1,24 +1,20 @@
-import {ChangeDetectorRef, Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
     BehaviorSubject,
-    filter,
     map,
     Observable,
-    of,
-    ReplaySubject,
     Subject,
     switchMap,
     take, takeUntil,
     tap,
-    throwError
 } from 'rxjs';
 import { environment } from "../../../environments/environment";
 
-import {cloneDeep, forEach} from "lodash-es";
-import {Quizz} from "./quizz.models";
-import {UserService} from "../user/user.service";
-import {User} from "../user/user.model";
+import { Quizz } from "./quizz.models";
+import { UserService } from "../user/user.service";
+import { User } from "../user/user.model";
+import {History} from "../history/history.models";
 
 @Injectable({
     providedIn: 'root'
@@ -63,9 +59,9 @@ export class QuizzService
     /**
      * Get all quizzs
      */
-    getAll(): Observable<Quizz[]>
+    getAll(sort: string = 'asc'): Observable<Quizz[]>
     {
-        return this._httpClient.get<any>(environment.backendUrl + 'quizzs/').pipe(
+        return this._httpClient.get<any>(environment.backendUrl + 'quizzs/' + sort).pipe(
             tap((quizzs) => {
                 if(quizzs) {
                     quizzs.forEach(quizz => {
@@ -82,14 +78,19 @@ export class QuizzService
     }
 
     /**
-     * Get all quizzs realised
+     * Get all histories by User id and Quiz id
+     * @param userId
      */
-    getAllRealised(): Observable<Quizz[]>
+    getAllRealised(userId: string): Observable<Quizz[]>
     {
-        return this._httpClient.get<any>(environment.backendUrl + 'Defis/Utilisateur/'  + this.user.id + '/DateCreation/desc').pipe(
-            tap((quizzs) => {
-                if(quizzs) {
-                    quizzs = quizzs.filter(quizz => quizz.realise && quizz.realise === true);
+        return this._httpClient.get<any>(environment.backendUrl + 'histories/user/'  + userId).pipe(
+            tap((histories) => {
+                if(histories) {
+                    let quizzs: Quizz[] = [];
+                    histories.forEach( history => {
+                        quizzs.push(history.quizz);
+                    })
+
                     this._quizzs.next(quizzs);
 
                     return quizzs;
@@ -97,6 +98,7 @@ export class QuizzService
             })
         );
     }
+
 
     /**
      * Get all quizzs order by like

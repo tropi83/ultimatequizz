@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -17,13 +18,16 @@ import java.util.List;
 @NoArgsConstructor
 public class HistoryRequest {
 
-    @NotEmpty(message = "{history_quizz_id_not_empty}")
+    @Min(value = 1, message = "{history_quizz_id_not_empty}")
     private int quizz_id;
 
-    @NotNull(message = "{history_user_id_not_empty}")
+    @Min(value = 1, message = "{history_user_id_not_empty}")
     private int user_id;
 
-    @NotNull(message = "{history_point_not_empty}")
-    private int point;
+    @Min(value = -9999, message = "{history_points_not_empty}")
+    private int points;
+
+    @Min(value = 0, message = "{history_time_not_empty}")
+    private float time;
 
 }

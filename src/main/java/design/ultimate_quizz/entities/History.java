@@ -1,7 +1,9 @@
 package design.ultimate_quizz.entities;
-import lombok.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,23 +17,32 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
+    private LocalDate creationDate;
+
     @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "quizz_id")
     private Quizz quizz;
 
     @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
-    private int point;
+    private int points;
 
-    public History(int id, User user, Quizz quizz, int point) {
+    @Column(nullable = false)
+    private float time;
+
+    public History(int id, LocalDate creationDate, User user, Quizz quizz, int points, float time) {
         this.id = id;
+        this.creationDate = creationDate;
         this.user = user;
         this.quizz = quizz;
-        this.point = point;
+        this.points = points;
+        this.time = time;
     }
-
 
 }

@@ -26,6 +26,9 @@ public class User {
 	@Column(unique = true, nullable = false, length = 255)
 	private String username;
 
+	@Column(unique = true, length = 255)
+	private String description;
+
 	@Column(nullable = false, length = 255)
 	private String password;
 
@@ -38,18 +41,5 @@ public class User {
 
 	@Column(nullable = false)
 	private LocalDate creationDate;
-
-	@Override
-	public String toString() {
-		return "User {" +
-				"id = " + id + ", " +
-				"email = " + email + ", " +
-				"lastname = " + lastname + ", " +
-				"firstname = " + firstname + ", " +
-				"username = " + username + ", " +
-				"creationDate = " + creationDate + ", " +
-				"userRole = '" + userRole +
-				'}';
-	}
 
 }

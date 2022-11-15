@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AuthenticatedUserDto {
 
+	private int id;
+
 	private String firstname;
 
 	private String lastname;
@@ -26,5 +28,7 @@ public class AuthenticatedUserDto {
 	private UserRole userRole;
 
 	private LocalDate creationDate;
+
+	private String description;
 
 }

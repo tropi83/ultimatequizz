@@ -6,7 +6,6 @@ import {
     tap,
 } from 'rxjs';
 import { environment } from "../../../environments/environment";
-
 import { Theme } from "./theme.models";
 
 @Injectable({
@@ -27,7 +26,6 @@ export class ThemeService
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
-
     /**
      * Getter for themes
      */
@@ -47,7 +45,6 @@ export class ThemeService
     {
         return this._httpClient.get<any>(environment.backendUrl + 'themes/').pipe(
             tap((themes) => {
-                console.log(themes)
                 if(themes) {
                     this._themes.next(themes);
                 }

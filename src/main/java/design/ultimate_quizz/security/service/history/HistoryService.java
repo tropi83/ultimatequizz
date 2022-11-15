@@ -19,6 +19,7 @@ public interface HistoryService {
 
 	List<History> getHistoriesByUser(Optional<User> user);
 
+	List<History> getHistoriesByUserAndByQuizz(Optional<User> user, Optional<Quizz> quizz);
 
 	void deleteHistory(int id);
 

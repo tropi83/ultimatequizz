@@ -24,6 +24,21 @@ export class FlashService {
         });
     }
 
+
+    successQuiz(message: string) {
+        this.snackBar.open(message, null, {
+            panelClass: ['bg-green-500', 'text-accent-50', 'custom-snackbar'],
+            duration: 3000
+        });
+    }
+
+    failQuiz(message: string) {
+        this.snackBar.open(message, null, {
+            panelClass: ['bg-red-500', 'text-accent-50', 'custom-snackbar'],
+            duration: 3000
+        });
+    }
+
     warn(message: string) {
         this.snackBar.open(message, null, {
             panelClass: ['bg-warn-400', 'text-accent-50', 'custom-snackbar'],

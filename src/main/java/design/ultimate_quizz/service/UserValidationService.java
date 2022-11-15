@@ -21,6 +21,7 @@ public class UserValidationService {
 	private static final String LASTNAME_TOO_LONG = "lastname_too_long";
 	private static final String FIRSTNAME_TOO_LONG = "firstname_too_long";
 	private static final String PASSWORD_TOO_LONG = "password_too_long";
+	private static final String DESCRIPTION_TOO_LONG = "description_too_long";
 
 	private final UserRepository userRepository;
 
@@ -96,6 +97,13 @@ public class UserValidationService {
 		if (registrationRequest.getPassword().length() > 254) {
 			log.warn("{} password is too long ! 255 characters max", registrationRequest.getPassword());
 			final String messageTooLong = exceptionMessageAccessor.getMessage(null, PASSWORD_TOO_LONG);
+
+			throw new RegistrationException(messageTooLong);
+		}
+
+		if (registrationRequest.getDescription() != null && registrationRequest.getDescription().length() > 254) {
+			log.warn("{} description is too long ! 255 characters max", registrationRequest.getDescription());
+			final String messageTooLong = exceptionMessageAccessor.getMessage(null, DESCRIPTION_TOO_LONG);
 
 			throw new RegistrationException(messageTooLong);
 		}

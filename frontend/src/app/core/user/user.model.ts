@@ -8,6 +8,7 @@ export class User
     userRole: string;
     creationDate: string;
     historyQuizz: [];
+    description?: string;
 
     /**
      * Constructor

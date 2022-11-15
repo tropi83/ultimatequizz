@@ -44,12 +44,33 @@ public class HistoryController {
         return this.historyService.getHistories();
     }
 
-    @GetMapping("histories/user/{id}")
-    public ResponseEntity<List<History>> getHistoryByUser(@PathVariable("id") int id) {
-        Optional<User> existUser = userService.getUserById(id);
+    @GetMapping("histories/user/{userId}")
+    public ResponseEntity<List<History>> getHistoryByUser(@PathVariable("userId") int userId) {
+        Optional<User> existUser = userService.getUserById(userId);
         if (existUser.isPresent())
         {
             return ResponseEntity.status(HttpStatus.OK).body(this.historyService.getHistoriesByUser(existUser));
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("histories/user/{userId}/quizz/{quizzId}")
+    public ResponseEntity<List<History>> getHistoryByUserAndByQuizz(@PathVariable("userId") int userId, @PathVariable("quizzId") int quizzId)
+    {
+        Optional<User> existUser = userService.getUserById(userId);
+        if (existUser.isPresent())
+        {
+            Optional<Quizz> existQuizz = quizzService.getQuizzById(quizzId);
+            if (existQuizz.isPresent())
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(this.historyService.getHistoriesByUserAndByQuizz(existUser, existQuizz));
+            }
+            else {
+                return ResponseEntity.notFound().build();
+            }
         }
         else {
             return ResponseEntity.notFound().build();
@@ -58,8 +79,8 @@ public class HistoryController {
 
     //@PreAuthorize("hasAuthority('USER')")
     @PostMapping("histories")
-    public ResponseEntity<History> addHistory(@Valid @RequestBody HistoryRequest historyRequest) {
-
+    public ResponseEntity<History> addHistory(@Valid @RequestBody HistoryRequest historyRequest)
+    {
         final History historyResponse = historyService.addHistory(historyRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(historyResponse);

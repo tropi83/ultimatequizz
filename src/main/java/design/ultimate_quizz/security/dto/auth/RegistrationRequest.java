@@ -31,4 +31,6 @@ public class RegistrationRequest {
 	@NotEmpty(message = "{registration_password_not_empty}")
 	private String password;
 
+	private String description;
+
 }

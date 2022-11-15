@@ -93,7 +93,7 @@ public class AnswerValidationService {
 
 				boolean thereIsAlreadyTrueAnswer = false;
 				for (Answer answer : question.getAnswers()) {
-					if (answer.getCorrect()){
+					if (answer.getIsCorrect()){
 						thereIsAlreadyTrueAnswer = true;
 					}
 				}

@@ -23,4 +23,6 @@ export interface FuseConfirmationConfig
     dismissible?: boolean;
     background?: boolean;
     height?: string;
+    isHistory?: boolean;
+    historiesData?: any[];
 }

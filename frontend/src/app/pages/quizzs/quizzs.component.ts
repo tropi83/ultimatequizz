@@ -11,6 +11,8 @@ import { MatSelectChange } from "@angular/material/select";
 import { Theme } from "../../core/theme/theme.types";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { ThemeService } from "../../core/theme/theme.service";
+import { Router } from "@angular/router";
+import { HistoryService } from "../../core/history/history.service";
 
 @Component({
     selector       : 'quizzs',
@@ -54,16 +56,20 @@ export class QuizzsComponent
 
     selectedQuizz: Quizz;
     selectedQuizzMode: string = "all";
-    gameMode: boolean = false;
+
+    /* todo remove */
+    gameMode: boolean = true;
 
     /**
      * Constructor
      */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
+        private _router: Router,
         private _userService: UserService,
         private _formBuilder: FormBuilder,
         private _quizzService: QuizzService,
+        private _historyService: HistoryService,
         private _themeService: ThemeService,
         private _fuseConfirmationService: FuseConfirmationService
     )
@@ -84,6 +90,9 @@ export class QuizzsComponent
             .subscribe((quizzs: Quizz[]) => {
                 this.quizzs = quizzs;
 
+                /* todo remove */
+                this.selectedQuizz = quizzs[0];
+
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
@@ -95,7 +104,6 @@ export class QuizzsComponent
             .subscribe((themes: Theme[]) => {
                 this.themes = themes;
 
-                console.log(themes)
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
@@ -121,8 +129,6 @@ export class QuizzsComponent
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
-
     /**
      * Switch quizz
      */
@@ -158,7 +164,7 @@ export class QuizzsComponent
     getOldest(){
         this.selectedQuizzMode = "oldest";
 
-        this._quizzService.getAll()
+        this._quizzService.getAll('desc')
             .subscribe(
                 (quizzs) => {
                     this.quizzs = quizzs;
@@ -171,13 +177,13 @@ export class QuizzsComponent
     }
 
     /**
-     * Get all quizz realised
+     * Get all quizz realised/history
      */
     getAllRealised(){
 
         this.selectedQuizzMode = "realised";
 
-        this._quizzService.getAllRealised()
+        this._quizzService.getAllRealised(this.user.id)
             .subscribe(
                 () => {
                     this._changeDetectorRef.markForCheck();
@@ -294,50 +300,100 @@ export class QuizzsComponent
      */
     createComment(): void
     {
-        // Return if the comment form is invalid
-        if ( this.commentForm.invalid )
-        {
-            return;
+        console.log(this.user)
+
+        if (!this.user) {
+
+            // Open the confirmation dialog
+            const confirmation = this._fuseConfirmationService.open({
+                title       : 'Veuillez vous connecter !',
+                message     : 'Vous devez être conncté pour ajouter un commentaire. Créer votre compte ou connectez vous.',
+                dismissible : true,
+                icon        : {
+                    show : true,
+                    name : 'heroicons_outline:exclamation',
+                    color: 'warn'
+                },
+                actions     : {
+                    confirm: {
+                        show : true,
+                        label: 'Se connecter',
+                        color: 'primary'
+                    },
+                    cancel : {
+                        show : true,
+                        label: 'S\'inscrire',
+                    }
+                }
+            });
+
+            // Subscribe to the confirmation dialog closed action
+            confirmation.afterClosed().subscribe(async (result) => {
+
+                // If the confirm button pressed... redirect to sign-in page
+                if ( result === 'confirmed' )
+                {
+                    await this._router.navigate(['sign-in']);
+                }
+                // If the confirm button pressed... redirect to sign-up page
+                else if ( result === 'cancelled' )
+                {
+                    await this._router.navigate(['sign-up']);
+                }
+            });
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+
+        } else {
+
+            // Return if the comment form is invalid
+            if ( this.commentForm.invalid )
+            {
+                return;
+            }
+
+            // Disable the comment form
+            this.commentForm.disable();
+
+            // Hide the comment alert
+            this.showAlertComment = false;
+
+            // Add Comment
+            this._quizzService.createComment(this.commentForm.controls['text'].value, this.selectedQuizz.id)
+                .subscribe(
+                    () => {
+                        this.alertComment = {
+                            type   : 'success',
+                            message: 'Commentaire crée avec succès.',
+                        };
+
+                        this.commentForm.reset();
+                    },
+                    (error) => {
+
+                        let errorMessage = error.error || error.errors.toString() || error.statusText || 'Une erreur est survenue. Veuillez re-essayer plus tard.';
+                        this.alertComment = {
+                            type   : 'error',
+                            message: errorMessage
+                        };
+
+                    },
+                    () => {
+                        // Re-enable the comment form
+                        this.commentForm.enable();
+
+                        // Show the comment alert
+                        this.showAlertComment = true;
+
+                        // Mark for check
+                        this._changeDetectorRef.markForCheck();
+                    }
+
+                );
         }
 
-        // Disable the comment form
-        this.commentForm.disable();
 
-        // Hide the comment alert
-        this.showAlertComment = false;
-
-        // Add Comment
-        this._quizzService.createComment(this.commentForm.controls['text'].value, this.selectedQuizz.id)
-            .subscribe(
-                () => {
-                    this.alertComment = {
-                        type   : 'success',
-                        message: 'Commentaire crée avec succès.',
-                    };
-
-                    this.commentForm.reset();
-                },
-                (error) => {
-
-                    let errorMessage = error.error || error.errors.toString() || error.statusText || 'Une erreur est survenue. Veuillez re-essayer plus tard.';
-                    this.alertComment = {
-                        type   : 'error',
-                        message: errorMessage
-                    };
-
-                },
-                () => {
-                    // Re-enable the comment form
-                    this.commentForm.enable();
-
-                    // Show the comment alert
-                    this.showAlertComment = true;
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-                }
-
-            );
     }
 
     /**
@@ -358,6 +414,8 @@ export class QuizzsComponent
      */
     onBackFromQuizzGame(eventData: boolean) {
         this.gameMode = eventData;
+
+
     }
 
     /**

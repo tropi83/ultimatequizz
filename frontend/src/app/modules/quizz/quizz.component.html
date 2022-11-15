@@ -1,5 +1,5 @@
 
-<div *ngIf="question" class="flex flex-auto justify-center w-full max-w-10xl mx-auto p-6 sm:p-8 " >
+<div *ngIf="question" class="flex flex-auto justify-center w-full max-w-10xl mx-auto p-8 sm:p-8 " >
 
     <!-- Quizz Infos -->
     <div *ngIf="quizz" class="hidden sm:block md:block lg:block lg:flex flex-col items-start mr-8">
@@ -58,14 +58,35 @@
                 *ngIf="quizzIsStarted"
                 class="px-6 mt-8"
                 mat-flat-button
-                [color]="'primary'"
-                (click)=" resetCountDown(); startQuizzGame(); ">
+                [color]="'primary'">
                 Score: {{ points }}
             </button>
             <button
-                *ngIf="quizzIsStarted === false"
-                (click)="resetCountDown(); startQuizzGame()"
+                *ngIf="quizzIsStarted && progress === 100"
                 class="px-6 mt-8"
+                mat-flat-button
+                [color]="'accent-300'"
+                (click)=" showHistory(); ">
+                <mat-icon
+                    class="icon-size-5 mr-2"
+                    [svgIcon]="'heroicons_solid:play'"></mat-icon>
+                Voir mon historique
+            </button>
+            <button
+                *ngIf="quizzIsStarted === false"
+                class="px-6 mt-8"
+                mat-flat-button
+                [color]="'accent-300'"
+                (click)=" showHistory(); ">
+                <mat-icon
+                    class="icon-size-5 mr-2"
+                    [svgIcon]="'heroicons_solid:play'"></mat-icon>
+                Voir mon historique
+            </button>
+            <button
+                *ngIf="quizzIsStarted === false"
+                (click)="resetCountDown(); startQuizzGame();"
+                class="px-6 mt-6"
                 mat-flat-button
                 [color]="'primary'">
                 <mat-icon
@@ -73,7 +94,6 @@
                     [svgIcon]="'heroicons_solid:play'"></mat-icon>
                 Lancer le quizz
             </button>
-
         </fuse-card>
 
     </div>
@@ -130,8 +150,8 @@
                         <div class="flex items-center justify-center w-12 h-12 rounded-full overflow-hidden ring-4 ring-bg-card">
                             <div
                                 class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-2xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
-                                *ngIf="question.position">
-                                {{ question.position }}
+                                >
+                                {{ time }}
                             </div>
                         </div>
                     </div>
@@ -143,19 +163,6 @@
 
                 <!-- Response after anwser -->
                 <div class="w-full text-lg font-medium text-center">
-                    <div class="w-1/3"></div>
-                    <div *ngIf="pause"
-                         class="flex flex-0 w-1/3 items-center justify-center sm:mr-4 mt-2"
-                         [ngClass]="{
-                        'text-primary-600 bg-primary-100 dark:text-primary-50 dark:bg-primary-600': success && progress === 100,
-                        'text-green-500 bg-green-100 dark:text-green-50 dark:bg-green-500': success && progress !== 100,
-                        'text-red-600 bg-red-100 dark:text-red-50 dark:bg-red-600': !success
-                    }">
-                        <h2 *ngIf="success && progress!==100" id="feedback-success">Correcte !</h2>
-                        <h2 *ngIf="!success" id="feedback-fail">Mauvaise réponse !</h2>
-                        <h2 *ngIf="success && progress===100" id="feedback-win">Vous avez gagné !</h2>
-                    </div>
-                    <div class="w-1/3"></div>
 
                     <!-- Answsers -->
                     <div class="mb-4" id="option-section">
@@ -179,7 +186,7 @@
                     </div>
 
                     <!-- Next button -->
-                    <div *ngIf="pause" id="next-section" class="text-right">
+                    <div *ngIf="pause && progress !== 100" id="next-section" class="text-right">
                         <button
                             class="mb-6 mt-2" style="right: 30px;"
                             mat-stroked-button
@@ -187,6 +194,25 @@
                             <span class="inline-flex items-center">
                                 <ng-container>
                                     <span>Suivant</span>
+                                </ng-container>
+                                <mat-icon
+                                    class="ml-1.5 icon-size-5"
+                                    [svgIcon]="'heroicons_solid:arrow-sm-right'">
+                                </mat-icon>
+                            </span>
+                        </button>
+                    </div>
+
+                    <div *ngIf="progress === 100" id="replay-section" class="text-center">
+
+                        <!-- Replay button -->
+                        <button
+                            class="mb-6 mt-2" style="right: 30px;"
+                            mat-stroked-button
+                            (click)="restartQuizzGame();">
+                            <span class="inline-flex items-center">
+                                <ng-container>
+                                    <span>Recommencer</span>
                                 </ng-container>
                                 <mat-icon
                                     class="ml-1.5 icon-size-5"
@@ -205,12 +231,12 @@
 
     <!-- Close button -->
         <button
-            class="ml-4"
+            class="absolute mt-2" style="right: 10px;"
             mat-icon-button
             [matTooltip]="'Fermer'"
             (click)="backToQuizzList()">
             <mat-icon
-                class="text-white"
+                class="dark:text-white"
                 [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
 

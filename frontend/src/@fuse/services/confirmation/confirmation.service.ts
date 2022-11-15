@@ -26,7 +26,9 @@ export class FuseConfirmationService
                 label: 'Annuler'
             }
         },
-        dismissible: false
+        dismissible: false,
+        isHistory: false,
+        historiesData: [],
     };
 
     /**

@@ -41,7 +41,7 @@
             <!-- Separator -->
             <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>
 
-            <!-- Stats -->
+            <!-- Stats Quizz created -->
             <div class="flex items-center mt-2 lg:mt-0 space-x-6">
                 <div class="flex flex-col items-center">
                     <span class="font-bold">200k</span>
@@ -144,25 +144,29 @@
                 <fuse-card class="flex flex-col max-w-80 w-full mt-6 p-8 shadow rounded-2xl bg-white dark:bg-opacity-5 dark:border"
                        #expandableCard02="fuseCard">
                 <div class="text-2xl font-semibold leading-tight">Profile</div>
-                <div class="mt-4">
-                    {{ user && user.id ? user.id : '' }}
-                    <br><br>
-                    J'adore les quizzs en tout genre.
-                </div>
+
+                <!-- User description -->
+                <div [innerHTML]="user && user.description ? user.description : ''  " class="mt-4"></div>
+
                 <hr class="w-full border-t my-6">
+
                 <div class="flex flex-col">
+
+                    <!-- User firstname -->
                     <div class="flex items-center">
                         <mat-icon
                             class="icon-size-5 mr-3"
                             [svgIcon]="'heroicons_outline:user'"></mat-icon>
                         <span class="leading-none">{{ user && user.firstname ? user.firstname : '' }}</span>
                     </div>
+                    <!-- User lastname -->
                     <div class="flex items-center mt-4">
                         <mat-icon
                             class="icon-size-5 mr-3"
                             [svgIcon]="'heroicons_outline:user'"></mat-icon>
                         <span class="leading-none">{{ user && user.lastname ? user.lastname : '' }}</span>
                     </div>
+                    <!-- User creationDate -->
                     <div class="flex items-center mt-4">
                         <mat-icon
                             class="icon-size-5 mr-3"
@@ -186,7 +190,9 @@
         <div  class="flex flex-col items-start">
 
             <!-- Filters -->
-            <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none mt-4">
+            <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none mt-7">
+
+                <!-- Filters Theme -->
                 <mat-form-field class="fuse-mat-no-subscript w-full sm:w-36">
                     <mat-select
                         [value]="'all'"
@@ -197,6 +203,8 @@
                         </ng-container>
                     </mat-select>
                 </mat-form-field>
+
+                <!-- Search input quizz by name -->
                 <mat-form-field
                     class="fuse-mat-no-subscript w-full sm:w-72 mt-4 sm:mt-0 sm:ml-4"
                     [floatLabel]="'always'">
@@ -210,6 +218,8 @@
                         matInput
                         #query>
                 </mat-form-field>
+
+                <!-- Show/hide quizz if history/realised -->
                 <mat-slide-toggle
                     class="mt-8 sm:mt-0 sm:ml-auto"
                     [color]="'primary'"
@@ -218,11 +228,11 @@
                 </mat-slide-toggle>
             </div>
 
-            <!-- Quizzs -->
+            <!-- Quizzs list -->
             <div  *ngFor="let quizz of quizzs;">
 
                 <fuse-card class="flex flex-col max-w-200 w-full mt-8 shadow rounded-2xl bg-white dark:bg-opacity-5 dark:border quizz-card-size" #expandableCard02="fuseCard">
-                    <div class="flex items-center mx-6 sm:mx-8 mt-4 mb-1  border-b pb-2">
+                    <div class="flex items-center mx-6 sm:mx-8 mt-4 mb-1 border-b pb-4">
                         <div class="flex flex-col">
                             <div class="flex">
 
@@ -261,23 +271,13 @@
                                     </div>
 
                                     <!-- Creation date -->
-                                    <span *ngIf="quizz && quizz.creationDate" class="text-sm text-secondary leading-none mt-2">
+                                    <span *ngIf="quizz && quizz.creationDate" class="text-sm text-secondary leading-none mt-2 pr-1">
                                         {{ quizz.creationDate | date: 'dd/MM/yyyy' }}
                                     </span>
                                 </div>
 
                             </div>
                         </div>
-                        <button *ngIf="quizz && quizz.comments && quizz.comments.length === 0 && quizz.user.id === user.id "
-                            class="ml-auto -mr-4"
-                            mat-icon-button
-                            [matMenuTriggerFor]="postCardMenu08">
-                            <mat-icon
-                                class="icon-size-5"
-                                [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                        </button>
-                        <mat-menu #postCardMenu08="matMenu" >
-                        </mat-menu>
                     </div>
                     <div class="m-6 sm:mx-8">
                         <ng-container *ngIf="quizz.name">
@@ -493,7 +493,7 @@
                                         </span>
                                         <div class="flex items-center text-sm text-secondary mt-2">
                                             <span class="mr-2">&bull;</span>
-                                            <span *ngIf="comment && comment.creationDate">{{ comment.creationDate | date: 'dd/MM/yyyy HH:mm' }}</span>
+                                            <span *ngIf="comment && comment.creationDate">{{ comment.creationDate | date: 'dd/MM/yyyy' }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -510,6 +510,6 @@
     </div>
 
     <ng-template #displayQuizzList  class="flex flex-auto justify-center w-full max-w-10xl mx-auto p-6 sm:p-8 ">
-        <app-quizz [quizz]="selectedQuizz" (gameMode)=onBackFromQuizzGame($event)></app-quizz>
+        <app-quizz [quizz]="selectedQuizz" [user]="user" (gameMode)=onBackFromQuizzGame($event)></app-quizz>
     </ng-template>
 </div>

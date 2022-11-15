@@ -14,8 +14,7 @@
     </ng-container>
 
     <!-- Content -->
-    <div class="flex w-full
-     flex-col sm:flex-row flex-auto items-center sm:items-start p-6 pb-6 sm:pb-8">
+    <div class="flex flex-col sm:flex-row flex-auto items-center sm:items-start p-8 pb-6 sm:pb-8 " style="min-height: 150px;">
 
         <!-- Icon -->
         <ng-container *ngIf="data.icon.show">
@@ -36,26 +35,104 @@
             </div>
         </ng-container>
 
-        <ng-container *ngIf="data.title">
-            <div class="flex flex-col items-center sm:items-start mt-4 sm:mt-0 sm:pr-8 space-y-1 text-center sm:text-left">
+        <ng-container *ngIf="data.isHistory !== null && data.isHistory === true">
+            <div class="flex flex-col items-center sm:items-start mt-8 sm:mt-0 sm:pr-8 space-y-1 text-center sm:text-center w-full">
 
                 <!-- Title -->
                 <ng-container *ngIf="data.title">
                     <div
-                        class="text-xl leading-6 font-medium"
+                        class="text-xl leading-6 font-medium w-full mb-6"
                         [innerHTML]="data.title"></div>
                 </ng-container>
+
+                <!-- History list -->
+                <fuse-card class="flex-col lg:flex-row w-full lg:max-w-5xl overflow-x-auto overflow-y-hidden">
+                    <div class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y">
+                        <!-- HEAD TABLE -->
+                        <div class="sticky left-0 grid grid-flow-row auto-rows-fr lg:grid-flow-col lg:auto-cols-fr lg:max-w-none divide-y lg:divide-y-0 lg:divide-x shadow-lg lg:shadow-none border-r lg:border-r-0 bg-card rounded-l lg:rounded-l-none">
+
+                            <div class="flex flex-col">
+                            </div>
+
+                            <div class="flex flex-col">
+                                <div class="flex flex-col justify-center p-4 pt-3 lg:py-8">
+                                    <div class="text-xl lg:text-2xl font-medium">Date</div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="flex flex-col justify-center p-4 pt-3 lg:py-8">
+                                    <div class="text-xl lg:text-2xl font-medium">Score</div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="flex flex-col justify-center p-4 pt-3 lg:py-8">
+                                    <div class="flex items-center">
+                                        <div class="text-xl lg:text-2xl font-medium">Temps</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BODY TABLE -->
+                        <div *ngFor="let history of data.historiesData">
+
+                            <div class="grid grid-flow-row auto-rows-fr lg:grid-flow-col lg:auto-cols-fr divide-y lg:divide-y-0 lg:divide-x">
+
+                                <!-- Date -->
+                                <div class="flex items-center justify-center p-4" style="min-width: 140px;">
+                                </div>
+
+                                <!-- Date -->
+                                <div class="flex items-center justify-center p-4" style="min-width: 140px;">
+                                    {{ history && history.creationDate | date: 'dd/MM/yyyy' }}
+                                </div>
+
+                                <!-- Score/Point -->
+                                <div class="flex items-center justify-center p-4" style="min-width: 140px;">
+                                    {{ history && history.points }}
+                                </div>
+
+                                <!-- Time -->
+                                <div class="flex items-center justify-center p-4" style="min-width: 140px;">
+                                    {{ history && history.time }} secondes
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </fuse-card>
+
+                <ng-container *ngIf="data.message" class="mt-8">
+                    <div
+                        class="text-secondar w-full"
+                        [innerHTML]="data.message"></div>
+                </ng-container>
+
 
             </div>
         </ng-container>
 
+        <ng-container *ngIf="data.isHistory  !== null && data.isHistory === false && (data.title || data.message)">
+            <div class="flex flex-col items-center sm:items-start mt-8 sm:mt-0 sm:pr-8 space-y-1 text-center sm:text-center w-full">
+
+                <!-- Title -->
+                <ng-container *ngIf="data.title">
+                    <div
+                        class="text-xl leading-6 font-medium w-full mb-6"
+                        [innerHTML]="data.title"></div>
+                </ng-container>
+
+                <!-- Message -->
+                <ng-container *ngIf="data.message" class="mt-8">
+                    <div
+                        class="text-secondar w-full"
+                        [innerHTML]="data.message"></div>
+                </ng-container>
+            </div>
+        </ng-container>
+
     </div>
-
-
-    <!-- Classic Message -->
-    <ng-container *ngIf="data.message && !data.executionLog" class="p-6">
-         <div class="pl-6 pr-6 pb-6 text-secondary" [innerHTML]="data.message"></div>
-    </ng-container>
 
     <!-- Actions -->
     <ng-container *ngIf="data.actions.confirm.show || data.actions.cancel.show">

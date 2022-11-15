@@ -15,6 +15,8 @@ import { FuseConfirmationConfig } from '@fuse/services/confirmation/confirmation
 
                 .mat-dialog-container {
                     padding: 0 !important;
+                    max-width: 55%;
+                    margin: auto;
                 }
             }
         `

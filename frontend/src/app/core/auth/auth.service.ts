@@ -68,21 +68,8 @@ export class AuthService
                     this._authenticated = true;
 
                     if(response.user){
-                        const user =
-                            new User(
-                                response.user.id,
-                                response.user.username,
-                                response.user.email,
-                                response.user.firstname,
-                                response.user.lastname,
-                                response.user.userRole,
-                                response.user.creationDate,
-                                [],
-                                //   response.historyQuizz,
-                            );
-
                         // Store the user on the user service
-                        this._userService.user = user;
+                        this._userService.user = response.user;
                     }
 
                 }

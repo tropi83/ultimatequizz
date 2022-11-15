@@ -11,21 +11,23 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { QuizzService } from "../../core/quizz/quizz.service";
-//import { HistoryQuizzService } from "../../core/history-quizz/history-quizz.service";
-
+import { HistoryService } from "../../core/history/history.service";
 import { Quizz } from "../../core/quizz/quizz.models";
 import { Question } from "../../core/question/question.models";
 import { Answer } from "../../core/answer/answer.types";
-//import { Player } from '../../model/player';
+import { FuseConfirmationService } from "../../../@fuse/services/confirmation";
+import { FlashService } from "../flash/flash.service";
+import { User } from "../../core/user/user.types";
 
 @Component({
     selector: 'app-quizz',
     templateUrl: './quizz.component.html',
     styleUrls  : ['./quizz.component.scss'],
 })
-export class QuizzComponent implements OnInit{
+export class QuizzComponent implements OnInit, AfterViewInit{
 
     @Input() quizz: Quizz;
+    @Input() user: User;
     @Output() gameMode = new EventEmitter<boolean>();
 
     //player: Player
@@ -36,6 +38,8 @@ export class QuizzComponent implements OnInit{
     questions: Question[];
 
     points: number = 0;
+    time: number = 0;
+    interval;
     fails: number = 0;
     correctPosition: number = 0;
     answerPosition: number = 0;
@@ -43,24 +47,33 @@ export class QuizzComponent implements OnInit{
     success : boolean = true;
     progress: number = 0;
 
+    savedOriginalAnswers: Answer[];
+    savedOriginalQuestion: Question;
+    savedOriginalQuestions: Question[];
+
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private elementRef: ElementRef,
         private route: ActivatedRoute,
         private quizzService: QuizzService,
-        //private historyQuizzService: HistoryQuizzService,
-        private _location: Location
+        private historyService: HistoryService,
+        private _location: Location,
+        private _fuseConfirmationService: FuseConfirmationService,
+        private _flashService: FlashService
     ) { }
 
 
     ngOnInit() {
         this.question = this.quizz.questions[0];
         this.questions = this.quizz.questions;
-        this.setAnswers();
 
+        this.savedOriginalQuestion = this.quizz.questions[0];
+        this.savedOriginalQuestions = this.quizz.questions;
+        this.setAnswers();
+        this._changeDetectorRef.markForCheck();
     }
 
-    /*
+    /**/
     ngAfterViewInit() {
         let script = document.createElement("script");
         script.type = "text/javascript";
@@ -68,28 +81,85 @@ export class QuizzComponent implements OnInit{
         this.elementRef.nativeElement.appendChild(script);
     }
 
-     */
-  /*
-  // Get player
-  getPlayer(id: string): void {
-    this.playerService.getPlayer(id)
-      .subscribe(player => {
-        this.player = player
-      });
-  }
 
-  // Update player score
-  updateScore(): void {
-    this.playerService.updatePlayer(this.player)
-      .subscribe();
-  }
-   */
 
     /**
-     * Update progress bar
+     * Update progress quizz
      */
     updateProgress(){
         this.progress = ((this.question.position) / (this.questions.length)) * 100;
+
+        if(this.progress === 100) {
+            this.displayEndOfGame();
+        }
+    }
+
+    /**
+     * Display end of game
+     */
+    displayEndOfGame() {
+
+        this.pauseTimer()
+
+        // Add history
+        this.historyService.createHistory(this.points, this.time, this.quizz.id)
+            .subscribe(
+                () => {
+                },
+                (error) => {
+                },
+                () => {
+
+                    // Open the confirmation dialog
+                    const confirmation = this._fuseConfirmationService.open({
+                        title       : 'Quizz terminé !',
+                        message     : 'Score: ' + this.points,
+                        dismissible : true,
+                        icon        : {
+                            show : true,
+                            name : 'heroicons_solid:shield-check',
+                            color: 'primary'
+                        },
+                        actions     : {
+                            confirm: {
+                                show : true,
+                                label: 'Quitter',
+                                color: 'primary'
+                            },
+                            cancel : {
+                                show : true,
+                                label: 'Recommencer'
+                            }
+                        }
+                    });
+
+                    // Subscribe to the confirmation dialog closed action
+                    confirmation.afterClosed().subscribe(async (result) => {
+
+                        // If the confirm button pressed...
+                        if ( result === 'cancelled' )
+                        {
+                            await this.restartQuizzGame();
+                        }
+                    });
+
+                    // Mark for check
+                    this._changeDetectorRef.markForCheck();
+                }
+            );
+    }
+
+
+    /**
+     * Update the score
+     */
+    updatePointScore() {
+        if(this.success){
+            this.points = this.points + 1;
+        } else {
+            this.points = this.points - 1;
+        }
+        this._changeDetectorRef.markForCheck();
     }
 
     /**
@@ -105,6 +175,22 @@ export class QuizzComponent implements OnInit{
             }
             this.pause = true;
         }
+
+        if(this.pause) {
+
+            if(this.success && this.progress !== 100) {
+                this._flashService.successQuiz('Correcte');
+            }
+            else if(!this.success) {
+                this._flashService.failQuiz('Mauvaise réponse !');
+            }
+            else if(!this.success && this.progress === 100) {
+                this._flashService.successQuiz('Vous avez gagné !');
+            }
+        }
+
+        this.updatePointScore();
+
     }
 
     /**
@@ -133,27 +219,39 @@ export class QuizzComponent implements OnInit{
      * Set answers
      */
     setAnswers(){
-        let array = [
-            { id: 1, label: this.question.answers[0].label, isCorrect: this.question.answers[0].isCorrect, question: this.question},
-            { id: 2, label: this.question.answers[1].label, isCorrect: this.question.answers[1].isCorrect, question: this.question},
-            { id: 3, label: this.question.answers[2].label, isCorrect: this.question.answers[2].isCorrect, question: this.question},
-            { id: 4, label: this.question.answers[3].label, isCorrect: this.question.answers[3].isCorrect, question: this.question},
-        ];
+
+        let arrayAnswers: Array<Answer> = [];
+        if(typeof this.question.answers[2] !== 'undefined' && typeof this.question.answers[3] !== 'undefined') {
+            arrayAnswers.push({ id: 1, label: this.question.answers[0].label, isCorrect: this.question.answers[0].isCorrect, question: this.question});
+            arrayAnswers.push({ id: 2, label: this.question.answers[1].label, isCorrect: this.question.answers[1].isCorrect, question: this.question});
+            arrayAnswers.push({ id: 3, label: this.question.answers[2].label, isCorrect: this.question.answers[2].isCorrect, question: this.question});
+            arrayAnswers.push({ id: 4, label: this.question.answers[3].label, isCorrect: this.question.answers[3].isCorrect, question: this.question});
+        }
+        else if(typeof this.question.answers[2] !== 'undefined' && typeof this.question.answers[3] === 'undefined') {
+            arrayAnswers.push({ id: 1, label: this.question.answers[0].label, isCorrect: this.question.answers[0].isCorrect, question: this.question});
+            arrayAnswers.push({ id: 2, label: this.question.answers[1].label, isCorrect: this.question.answers[1].isCorrect, question: this.question});
+            arrayAnswers.push({ id: 3, label: this.question.answers[2].label, isCorrect: this.question.answers[2].isCorrect, question: this.question});
+        }
+        else if(typeof this.question.answers[2] === 'undefined' && typeof this.question.answers[3] === 'undefined') {
+            arrayAnswers.push({ id: 1, label: this.question.answers[0].label, isCorrect: this.question.answers[0].isCorrect, question: this.question});
+            arrayAnswers.push({ id: 2, label: this.question.answers[1].label, isCorrect: this.question.answers[1].isCorrect, question: this.question});
+        }
+
 
         // Shuffle array
-        let currentIndex = array.length, temporaryValue, randomIndex;
+        let currentIndex = arrayAnswers.length, temporaryValue, randomIndex;
         while (0 !== currentIndex) {
             randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex -= 1;
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
+            temporaryValue = arrayAnswers[currentIndex];
+            arrayAnswers[currentIndex] = arrayAnswers[randomIndex];
+            arrayAnswers[randomIndex] = temporaryValue;
         }
 
         // Set correct answer position
-        this.correctPosition = array.findIndex(x => x.id === 1);
+        this.correctPosition = arrayAnswers.findIndex(x => x.id === 1);
 
-        this.answers = array;
+        this.answers = arrayAnswers;
     }
 
     /**
@@ -182,6 +280,9 @@ export class QuizzComponent implements OnInit{
      */
     async startQuizzGame() {
         if(this.quizzIsStarted === false){
+
+            this.startTimer();
+
             this.quizzIsStarted = true;
             this.countDownIsStarted = true;
             this._changeDetectorRef.markForCheck();
@@ -195,9 +296,113 @@ export class QuizzComponent implements OnInit{
     }
 
     /**
+     * ReStart Quiz game
+     */
+    async restartQuizzGame() {
+
+        this.answers = this.savedOriginalAnswers;
+        this.question = this.savedOriginalQuestion;
+        this.questions = this.savedOriginalQuestions;
+        this.time = 0;
+        this.points = 0;
+        this.fails = 0;
+        this.correctPosition = 0;
+        this.answerPosition = 0;
+        this.pause = false;
+        this.success = true;
+        this.progress = 0;
+
+        this.setAnswers();
+        this._changeDetectorRef.markForCheck();
+
+        await this.startQuizzGame();
+        this._changeDetectorRef.markForCheck();
+    }
+
+    /**
      * Sleep/Wait function
      */
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    /**
+     * Show Quiz history by quizz and user
+     */
+    showHistory(){
+
+        // Add history
+        this.historyService.getAllByUserIdAndQuizzId(this.user.id, this.quizz.id)
+            .subscribe(
+                (histories) => {
+
+                    // Open the confirmation dialog
+                    this._fuseConfirmationService.open({
+                        title           : 'Historique',
+                        message         : '',
+                        isHistory       : true,
+                        historiesData   : histories,
+                        dismissible     : true,
+                        icon       : {
+                            show : true,
+                            name : 'heroicons_solid:archive',
+                            color: 'primary'
+                        },
+                        actions    : {
+                            confirm: {
+                                show : true,
+                                label: 'Quitter',
+                                color: 'primary'
+                            },
+                            cancel: {
+                                show : false,
+                                label: 'Quitter'
+                            }
+                        }
+                    });
+
+                    // Mark for check
+                    this._changeDetectorRef.markForCheck();
+                }
+            );
+
+    }
+
+    /**
+     * Tranform/format to 'mm:ss'
+     */
+    transformTime(value: number): string {
+        const minutes: number = Math.floor(value / 60);
+
+
+
+        return minutes + ':' + (value - minutes * 60);
+    }
+
+    /**
+     * Counts the seconds elapsed
+     */
+    startTimer() {
+        this.interval = setInterval(() => {
+
+            console.log(this.time )
+
+            if (this.time === 0) {
+                this.time++;
+            } else {
+                this.time++;
+            }
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+        }, 1000);
+    }
+
+    /**
+     * Pause the timer
+     */
+    pauseTimer() {
+        clearInterval(this.interval);
+    }
+
 }

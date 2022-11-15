@@ -180,7 +180,7 @@ public class QuizzValidationService {
 		for (Question question : quizzRequest.getQuestions()) {
 			int trueAnswerCounter = 0;
 			for (Answer answer : question.getAnswers()) {
-				if (answer.getCorrect()){
+				if (answer.getIsCorrect()){
 					trueAnswerCounter = trueAnswerCounter + 1;
 				}
 			}

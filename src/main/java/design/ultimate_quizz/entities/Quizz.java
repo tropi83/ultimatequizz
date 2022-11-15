@@ -1,13 +1,17 @@
 package design.ultimate_quizz.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
+@Builder
+@NoArgsConstructor
 @Table(name = "quizzs")
 public class Quizz {
     @Id
@@ -33,11 +37,10 @@ public class Quizz {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Theme theme;
 
+    // TODO DATE CREATE QUIZZ HISTO + DEZSCIRPYION USER
+
     @OneToMany(mappedBy = "quizz", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
-
-    public Quizz() {
-    }
 
     public Quizz(int id, String name, String description, LocalDate creationDate, LocalDate updateDate, Boolean isActive, Theme theme, List<Question> questions) {
         this.id = id;
@@ -48,88 +51,6 @@ public class Quizz {
         this.isActive = isActive;
         this.theme = theme;
         this.questions = questions;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Theme getTheme() {
-        return theme;
-    }
-
-    public void setTheme(Theme theme) {
-        this.theme = theme;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public LocalDate getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(LocalDate updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        if(questions.size() > 5 && questions.size() < 20) {
-            this.questions = questions;
-        }
-    }
-
-    public void addQuestion(Question question) {
-        this.questions.add(question);
-    }
-
-    @Override
-    public String toString() {
-        return "Quizz {" +
-                    "id = " + id + ", " +
-                    "name = '" + name + ", " +'\'' +
-                    "creationDate = '" + creationDate + ", " +'\'' +
-                    "updateDate = '" + updateDate + ", " +'\'' +
-                    "updateDate = '" + isActive + ", " +'\'' +
-                    "theme = '" + theme +
-                '}';
     }
 
 }
