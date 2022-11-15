@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -32,6 +33,11 @@ public class UserServiceImpl implements UserService {
 	private final UserValidationService userValidationService;
 
 	private final GeneralMessageAccessor generalMessageAccessor;
+
+	@Override
+	public List<User> getUsers(){
+		return userRepository.findAll();
+	}
 
 	@Override
 	public User findByUsername(String username) {

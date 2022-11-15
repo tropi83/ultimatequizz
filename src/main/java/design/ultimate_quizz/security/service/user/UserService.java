@@ -6,10 +6,13 @@ import design.ultimate_quizz.security.dto.auth.AuthenticatedUserDto;
 import design.ultimate_quizz.security.dto.auth.RegistrationRequest;
 import design.ultimate_quizz.security.dto.auth.RegistrationResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 
 public interface UserService {
+
+	List<User> getUsers();
 
 	User findByUsername(String username);
 
