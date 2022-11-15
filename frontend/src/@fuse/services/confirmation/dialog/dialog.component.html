@@ -46,8 +46,8 @@
                 </ng-container>
 
                 <!-- History list -->
-                <fuse-card class="flex-col lg:flex-row w-full lg:max-w-5xl overflow-x-auto overflow-y-hidden">
-                    <div class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y">
+                <fuse-card  class="flex-col lg:flex-row w-full lg:max-w-5xl overflow-x-auto overflow-y-hidden">
+                    <div *ngIf="data.historiesData && data.historiesData.length > 0" class="grid grid-flow-col lg:grid-flow-row min-w-max lg:min-w-0 divide-x lg:divide-x-0 lg:divide-y">
                         <!-- HEAD TABLE -->
                         <div class="sticky left-0 grid grid-flow-row auto-rows-fr lg:grid-flow-col lg:auto-cols-fr lg:max-w-none divide-y lg:divide-y-0 lg:divide-x shadow-lg lg:shadow-none border-r lg:border-r-0 bg-card rounded-l lg:rounded-l-none">
 
@@ -100,6 +100,9 @@
 
                         </div>
 
+                    </div>
+                    <div *ngIf="data.historiesData && data.historiesData.length === 0" class="w-full text-center" style="min-height: 50px;">
+                        Pas encore d'historique
                     </div>
                 </fuse-card>
 

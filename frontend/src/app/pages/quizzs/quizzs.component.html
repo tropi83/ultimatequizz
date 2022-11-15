@@ -97,31 +97,14 @@
                     <span *ngIf="selectedQuizzMode === 'realised'" class="flex sm:items-center font-medium cursor-pointer">
                         <mat-icon
                             class="icon-size-5 mr-3 leading-6 text-primary"
-                            [svgIcon]="'iconsmind:trophy'"></mat-icon>
+                            [svgIcon]="'heroicons_solid:save'"></mat-icon>
                         Réalisés
                     </span>
                     <span *ngIf="selectedQuizzMode !== 'realised'" class="flex sm:items-center text-secondary cursor-pointer">
                         <mat-icon
                             class="icon-size-5 mr-3 leading-6"
-                            [svgIcon]="'iconsmind:trophy'"></mat-icon>
+                            [svgIcon]="'heroicons_solid:save'"></mat-icon>
                         Réalisés
-                    </span>
-                </button>
-                <button
-                    (click)="getAllByLikeDesc();"
-                    class="px-3 mr-1 -ml-2 sm:ml-0"
-                    mat-button>
-                    <span *ngIf="selectedQuizzMode === 'bestLike'" class="flex sm:items-center font-medium cursor-pointer">
-                        <mat-icon
-                            class="icon-size-5 mr-3 leading-6 text-primary"
-                            [svgIcon]="'heroicons_solid:thumb-up'"></mat-icon>
-                        Les plus Like
-                    </span>
-                    <span *ngIf="selectedQuizzMode !== 'bestLike'" class="flex sm:items-center text-secondary cursor-pointer">
-                        <mat-icon
-                            class="icon-size-5 mr-3 leading-6"
-                            [svgIcon]="'heroicons_solid:thumb-up'"></mat-icon>
-                        Les plus Like
                     </span>
                 </button>
             </div>
@@ -335,17 +318,6 @@
                             </button>
                         </div>
 
-
-                        <button *ngIf="quizz && quizz.realise === true"
-                                (click)="unrealisedQuizz(quizz)"
-                                class="px-3 mr-1"
-                                mat-button
-                                [routerLink]="['./']">
-                            <mat-icon
-                                class="icon-size-5 text-primary mr-2"
-                                [svgIcon]="'iconsmind:trophy_2'"></mat-icon>
-                            <span>Réalisé</span>
-                        </button>
                         <button *ngIf="quizz && quizz.realise === false"
                                 (click)="realisedQuizz(quizz)"
                                 class="px-3 mr-1"
@@ -510,6 +482,12 @@
     </div>
 
     <ng-template #displayQuizzList  class="flex flex-auto justify-center w-full max-w-10xl mx-auto p-6 sm:p-8 ">
-        <app-quizz [quizz]="selectedQuizz" [user]="user" (gameMode)=onBackFromQuizzGame($event)></app-quizz>
+        <app-quizz
+            [quizz]="selectedQuizz"
+            [user]="user"quizzsavec
+            (gameMode)=onBackFromQuizzGame($event)
+            (gameIsStarted)=onQuizStartedStateChange($event)>
+
+        </app-quizz>
     </ng-template>
 </div>

@@ -66,10 +66,32 @@
                 class="px-6 mt-8"
                 mat-flat-button
                 [color]="'accent-300'"
+                (click)=" showBestHistory(); ">
+                <mat-icon
+                    class="icon-size-5 mr-2"
+                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                Meilleurs scores
+            </button>
+            <button
+                *ngIf="quizzIsStarted === false"
+                class="px-6 mt-8"
+                mat-flat-button
+                [color]="'accent-300'"
+                (click)=" showBestHistory(); ">
+                <mat-icon
+                    class="icon-size-5 mr-2"
+                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                Meilleurs scores
+            </button>
+            <button
+                *ngIf="quizzIsStarted && progress === 100"
+                class="px-6 mt-8"
+                mat-flat-button
+                [color]="'accent-300'"
                 (click)=" showHistory(); ">
                 <mat-icon
                     class="icon-size-5 mr-2"
-                    [svgIcon]="'heroicons_solid:play'"></mat-icon>
+                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
                 Voir mon historique
             </button>
             <button
@@ -80,7 +102,7 @@
                 (click)=" showHistory(); ">
                 <mat-icon
                     class="icon-size-5 mr-2"
-                    [svgIcon]="'heroicons_solid:play'"></mat-icon>
+                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
                 Voir mon historique
             </button>
             <button
@@ -157,7 +179,7 @@
                     </div>
 
                     <!-- Question label -->
-                    <div class="w-full text-lg font-medium text-center">{{question.label}}</div>
+                    <div class="w-full text-lg font-medium text-center">{{ question.label }}</div>
 
                 </div>
 
@@ -173,9 +195,9 @@
                                         <button style="min-width: 300px; max-width: 300px;min-height: 50px;"
                                                 class="relative max-w-3/4 px-3 py-2 rounded-lg bg-blue-500 text-blue-50 mt-2 mb-2"
                                                 (click)="displayAnswer(i)" id="option" type="button"
-                                                [ngClass]="pause? 'text-accent-600 bg-accent-100 dark:text-accent-50 dark:bg-accent-600 cursor-default' : ''"
-                                                [ngClass]="pause && i == correctPosition? 'text-green-500 bg-green-100 dark:text-green-50 dark:bg-green-500 cursor-default' : 'bg-blue-500 text-blue-50'"
-                                                [ngClass]="pause && (answerPosition!=correctPosition && i == answerPosition)? 'text-red-600 bg-red-100 dark:text-red-50 dark:bg-red-600 cursor-default' : 'bg-blue-500 text-blue-50'"
+                                                [ngClass]="pause ? 'text-accent-600 bg-accent-100 dark:text-accent-50 dark:bg-accent-600 cursor-default' : ''"
+                                                [ngClass]="pause && i == correctPosition ? 'text-green-500 bg-green-100 dark:text-green-50 dark:bg-green-500 cursor-default' : 'bg-blue-500 text-blue-50'"
+                                                [ngClass]="pause && (answerPosition != correctPosition && i == answerPosition) ? 'text-red-600 bg-red-100 dark:text-red-50 dark:bg-red-600 cursor-default' : 'bg-blue-500 text-blue-50'"
                                         >
                                             {{ answer.label }}
                                         </button>

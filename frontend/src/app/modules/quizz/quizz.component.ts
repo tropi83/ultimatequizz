@@ -29,8 +29,8 @@ export class QuizzComponent implements OnInit, AfterViewInit{
     @Input() quizz: Quizz;
     @Input() user: User;
     @Output() gameMode = new EventEmitter<boolean>();
+    @Output() gameIsStarted = new EventEmitter<boolean>();
 
-    //player: Player
     quizzIsStarted: boolean = false;
     countDownIsStarted: boolean = false;
     answers: Answer[];
@@ -62,7 +62,6 @@ export class QuizzComponent implements OnInit, AfterViewInit{
         private _flashService: FlashService
     ) { }
 
-
     ngOnInit() {
         this.question = this.quizz.questions[0];
         this.questions = this.quizz.questions;
@@ -73,15 +72,12 @@ export class QuizzComponent implements OnInit, AfterViewInit{
         this._changeDetectorRef.markForCheck();
     }
 
-    /**/
     ngAfterViewInit() {
         let script = document.createElement("script");
         script.type = "text/javascript";
         script.textContent = "var ml4 = { opacityIn: undefined, scaleIn: undefined, scaleOut: undefined, durationIn: undefined, durationOut: undefined, delay: undefined }; ml4.opacityIn = [0,1]; ml4.scaleIn = [0.2, 1]; ml4.scaleOut = 3; ml4.durationIn = 600; ml4.durationOut = 500; ml4.delay = 400; anime.timeline({loop: false}) .add({ targets: '.ml4 .letters-1', opacity: ml4.opacityIn, scale: ml4.scaleIn, duration: ml4.durationIn }).add({ targets: '.ml4 .letters-1', opacity: 0, scale: ml4.scaleOut, duration: ml4.durationOut, easing: \"easeInExpo\", delay: ml4.delay }).add({ targets: '.ml4 .letters-2', opacity: ml4.opacityIn, scale: ml4.scaleIn, duration: ml4.durationIn }).add({ targets: '.ml4 .letters-2', opacity: 0, scale: ml4.scaleOut, duration: ml4.durationOut, easing: \"easeInExpo\", delay: ml4.delay }).add({ targets: '.ml4 .letters-3', opacity: ml4.opacityIn, scale: ml4.scaleIn, duration: ml4.durationIn }).add({ targets: '.ml4 .letters-3', opacity: 0, scale: ml4.scaleOut, duration: ml4.durationOut, easing: \"easeInExpo\", delay: ml4.delay }).add({ targets: '.ml4 .letters-4', opacity: ml4.opacityIn, scale: ml4.scaleIn, duration: ml4.durationIn }).add({ targets: '.ml4 .letters-4', opacity: 0, scale: ml4.scaleOut, duration: ml4.durationOut, easing: \"easeInExpo\", delay: ml4.delay }).add({ targets: '.ml4', opacity: 0, duration: 500, delay: 500 });";
         this.elementRef.nativeElement.appendChild(script);
     }
-
-
 
     /**
      * Update progress quizz
@@ -149,9 +145,8 @@ export class QuizzComponent implements OnInit, AfterViewInit{
             );
     }
 
-
     /**
-     * Update the score
+     * Update the score point
      */
     updatePointScore() {
         if(this.success){
@@ -170,21 +165,21 @@ export class QuizzComponent implements OnInit, AfterViewInit{
             this.updateProgress();
             this.answerPosition = index;
 
-            if (index!=this.correctPosition) {
+            if (index != this.correctPosition) {
                 this.success = false;
             }
             this.pause = true;
         }
 
-        if(this.pause) {
+        if (this.pause) {
 
-            if(this.success && this.progress !== 100) {
+            if( this.success && this.progress !== 100) {
                 this._flashService.successQuiz('Correcte');
             }
-            else if(!this.success) {
+            else if (!this.success) {
                 this._flashService.failQuiz('Mauvaise réponse !');
             }
-            else if(!this.success && this.progress === 100) {
+            else if (!this.success && this.progress === 100) {
                 this._flashService.successQuiz('Vous avez gagné !');
             }
         }
@@ -197,21 +192,10 @@ export class QuizzComponent implements OnInit, AfterViewInit{
      * Go to the next question
      */
     goNext(){
-
         if (this.question.position < this.questions.length) {
             this.question = this.questions.find(q => q.position == this.question.position + 1);
             this.setAnswers();
             this.pause = false;
-        } else {
-            if(this.success){
-            /*
-            if (!this.player.completed.includes(this.quizz.id)) {
-                console.log("Updating score")
-                this.player.completed.push(this.quizz.id)
-                this.updateScore()
-            }
-            */
-            }
         }
     }
 
@@ -237,7 +221,6 @@ export class QuizzComponent implements OnInit, AfterViewInit{
             arrayAnswers.push({ id: 2, label: this.question.answers[1].label, isCorrect: this.question.answers[1].isCorrect, question: this.question});
         }
 
-
         // Shuffle array
         let currentIndex = arrayAnswers.length, temporaryValue, randomIndex;
         while (0 !== currentIndex) {
@@ -249,16 +232,25 @@ export class QuizzComponent implements OnInit, AfterViewInit{
         }
 
         // Set correct answer position
-        this.correctPosition = arrayAnswers.findIndex(x => x.id === 1);
+        this.correctPosition = arrayAnswers.findIndex(x => x.isCorrect === true);
 
         this.answers = arrayAnswers;
     }
 
     /**
-     * Close Quiz game and return to list
+     * Close Quiz game and return to quiz list (communicate with parent component "QuizzsComponent")
      */
     backToQuizzList(){
+        this.quizzIsStarted = false;
+        this.gameIsStarted.emit(this.quizzIsStarted);
         this.gameMode.emit(false);
+    }
+
+    /**
+     * Signals Quiz game is started to parent (communicate with child component "QuizzComponent")
+     */
+    signalsStartedGame(){
+        this.gameIsStarted.emit(this.quizzIsStarted);
     }
 
     async resetCountDown() {
@@ -274,7 +266,6 @@ export class QuizzComponent implements OnInit, AfterViewInit{
         //}
     }
 
-
     /**
      * Start Quiz game
      */
@@ -287,11 +278,11 @@ export class QuizzComponent implements OnInit, AfterViewInit{
             this.countDownIsStarted = true;
             this._changeDetectorRef.markForCheck();
 
-            console.log('before ')
+            this.signalsStartedGame();
+
             //await this.sleep(5000);
             this.countDownIsStarted = false;
             this._changeDetectorRef.markForCheck();
-            console.log('after ')
         }
     }
 
@@ -330,8 +321,6 @@ export class QuizzComponent implements OnInit, AfterViewInit{
      * Show Quiz history by quizz and user
      */
     showHistory(){
-
-        // Add history
         this.historyService.getAllByUserIdAndQuizzId(this.user.id, this.quizz.id)
             .subscribe(
                 (histories) => {
@@ -365,7 +354,45 @@ export class QuizzComponent implements OnInit, AfterViewInit{
                     this._changeDetectorRef.markForCheck();
                 }
             );
+    }
 
+    /**
+     * Show Best Quiz history by quizz
+     */
+    showBestHistory(){
+        this.historyService.getAllByQuizzId(this.quizz.id)
+            .subscribe(
+                (histories) => {
+
+                    // Open the confirmation dialog
+                    this._fuseConfirmationService.open({
+                        title           : 'Meilleurs scores',
+                        message         : '',
+                        isHistory       : true,
+                        historiesData   : histories,
+                        dismissible     : true,
+                        icon       : {
+                            show : true,
+                            name : 'heroicons_solid:archive',
+                            color: 'primary'
+                        },
+                        actions    : {
+                            confirm: {
+                                show : true,
+                                label: 'Quitter',
+                                color: 'primary'
+                            },
+                            cancel: {
+                                show : false,
+                                label: 'Quitter'
+                            }
+                        }
+                    });
+
+                    // Mark for check
+                    this._changeDetectorRef.markForCheck();
+                }
+            );
     }
 
     /**
@@ -373,8 +400,6 @@ export class QuizzComponent implements OnInit, AfterViewInit{
      */
     transformTime(value: number): string {
         const minutes: number = Math.floor(value / 60);
-
-
 
         return minutes + ':' + (value - minutes * 60);
     }
@@ -384,8 +409,6 @@ export class QuizzComponent implements OnInit, AfterViewInit{
      */
     startTimer() {
         this.interval = setInterval(() => {
-
-            console.log(this.time )
 
             if (this.time === 0) {
                 this.time++;

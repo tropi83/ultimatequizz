@@ -61,4 +61,14 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
+
+    /**
+     * Go to home
+     */
+    goToHome(): void
+    {
+        this._router.navigate(['/quizzs']);
+    }
+
+
 }

@@ -22,7 +22,6 @@ public class ThemeServiceImpl implements ThemeService {
 
 	private final ThemeValidationService themeValidationService;
 
-
 	@Override
 	public ThemeResponse addTheme(ThemeRequest themeRequest) {
 

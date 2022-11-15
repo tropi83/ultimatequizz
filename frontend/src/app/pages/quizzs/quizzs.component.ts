@@ -59,6 +59,7 @@ export class QuizzsComponent
 
     /* todo remove */
     gameMode: boolean = true;
+    gameIsStarted: boolean = false;
 
     /**
      * Constructor
@@ -141,39 +142,161 @@ export class QuizzsComponent
 
 
     /**
-     * Get all quizz realised
+     * Get all quiz by date asc (default)
      */
     getAll(){
-        this.selectedQuizzMode = "all";
 
-        this._quizzService.getAll()
-            .subscribe(
-                (quizzs) => {
-                    this.quizzs = quizzs;
-                    this._changeDetectorRef.markForCheck();
+        if(this.gameIsStarted){
+            // Open the confirmation dialog
+            const confirmation = this._fuseConfirmationService.open({
+                title       : 'Quizz en cours !',
+                message     : 'Attention ! Vous êtes en train de réaliser un quizz. Votre partie ne sera pas sauvegardée',
+                dismissible : true,
+                icon        : {
+                    show : true,
+                    name : 'heroicons_outline:exclamation',
+                    color: 'warn'
+                },
+                actions     : {
+                    confirm: {
+                        show : true,
+                        label: 'Quitter',
+                        color: 'primary'
+                    },
+                    cancel : {
+                        show : true,
+                        label: 'Revenir',
+                    }
                 }
-            );
+            });
 
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
+            // Subscribe to the confirmation dialog closed action
+            confirmation.afterClosed().subscribe(async (result) => {
+
+                // If the confirm button pressed... redirect to sign-in page
+                if ( result === 'confirmed' )
+                {
+                    this.gameMode = false;
+                    this.gameIsStarted = false;
+                    this.selectedQuizzMode = "all";
+                    this._quizzService.getAll()
+                        .subscribe(
+                            (quizzs) => {
+                                this.quizzs = quizzs;
+                                this._changeDetectorRef.markForCheck();
+                            }
+                        );
+
+                    // Mark for check
+                    this._changeDetectorRef.markForCheck();
+
+                }
+                // If the confirm button pressed... redirect to sign-up page
+                else if ( result === 'cancelled' )
+                {
+                    return;
+                }
+            });
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+
+        } else {
+            this.gameMode = false;
+            this.gameIsStarted = false;
+            this.selectedQuizzMode = "all";
+            this._quizzService.getAll()
+                .subscribe(
+                    (quizzs) => {
+                        this.quizzs = quizzs;
+                        this._changeDetectorRef.markForCheck();
+                    }
+                );
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+        }
+
     }
 
     /**
      * Get all quizz by creation date most old
      */
     getOldest(){
-        this.selectedQuizzMode = "oldest";
 
-        this._quizzService.getAll('desc')
-            .subscribe(
-                (quizzs) => {
-                    this.quizzs = quizzs;
-                    this._changeDetectorRef.markForCheck();
+        if(this.gameIsStarted){
+            // Open the confirmation dialog
+            const confirmation = this._fuseConfirmationService.open({
+                title       : 'Quizz en cours !',
+                message     : 'Attention ! Vous êtes en train de réaliser un quizz. Votre partie ne sera pas sauvegardée',
+                dismissible : true,
+                icon        : {
+                    show : true,
+                    name : 'heroicons_outline:exclamation',
+                    color: 'warn'
+                },
+                actions     : {
+                    confirm: {
+                        show : true,
+                        label: 'Quitter',
+                        color: 'primary'
+                    },
+                    cancel : {
+                        show : true,
+                        label: 'Revenir',
+                    }
                 }
-            );
+            });
 
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
+            // Subscribe to the confirmation dialog closed action
+            confirmation.afterClosed().subscribe(async (result) => {
+
+                // If the confirm button pressed... redirect to sign-in page
+                if ( result === 'confirmed' )
+                {
+                    this.gameMode = false;
+                    this.gameIsStarted = false;
+                    this.selectedQuizzMode = "oldest";
+
+                    this._quizzService.getAll('asc')
+                        .subscribe(
+                            (quizzs) => {
+                                this.quizzs = quizzs;
+                                this._changeDetectorRef.markForCheck();
+                            }
+                        );
+
+                    // Mark for check
+                    this._changeDetectorRef.markForCheck();
+
+                }
+                // If the confirm button pressed... redirect to sign-up page
+                else if ( result === 'cancelled' )
+                {
+                   return;
+                }
+            });
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+
+        } else {
+            this.gameMode = false;
+            this.gameIsStarted = false;
+            this.selectedQuizzMode = "oldest";
+
+            this._quizzService.getAll('asc')
+                .subscribe(
+                    (quizzs) => {
+                        this.quizzs = quizzs;
+                        this._changeDetectorRef.markForCheck();
+                    }
+                );
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+        }
+
     }
 
     /**
@@ -181,81 +304,81 @@ export class QuizzsComponent
      */
     getAllRealised(){
 
-        this.selectedQuizzMode = "realised";
-
-        this._quizzService.getAllRealised(this.user.id)
-            .subscribe(
-                () => {
-                    this._changeDetectorRef.markForCheck();
-                }
-            );
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-    /**
-     * Get all quizz order by like DESC
-     */
-    getAllByLikeDesc(){
-
-        this.selectedQuizzMode = "bestLike";
-
-        this._quizzService.getAllByLike()
-            .subscribe(
-                () => {
-                    this._changeDetectorRef.markForCheck();
-                }
-            );
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-
-    /**
-     * Like quizz
-     */
-    like(quizz){
-
-        this._quizzService.likeQuizz(quizz)
-            .subscribe(
-                () => {
-                    quizz.like = true;
+        if(this.gameIsStarted){
+            // Open the confirmation dialog
+            const confirmation = this._fuseConfirmationService.open({
+                title       : 'Quizz en cours !',
+                message     : 'Attention ! Vous êtes en train de réaliser un quizz. Votre partie ne sera pas sauvegardée',
+                dismissible : true,
+                icon        : {
+                    show : true,
+                    name : 'heroicons_outline:exclamation',
+                    color: 'warn'
                 },
-                (error) => {
-                    quizz.like = false;
-                },()=>{
+                actions     : {
+                    confirm: {
+                        show : true,
+                        label: 'Quitter',
+                        color: 'primary'
+                    },
+                    cancel : {
+                        show : true,
+                        label: 'Revenir',
+                    }
+                }
+            });
+
+            // Subscribe to the confirmation dialog closed action
+            confirmation.afterClosed().subscribe(async (result) => {
+
+                // If the confirm button pressed... redirect to sign-in page
+                if ( result === 'confirmed' )
+                {
+                    this.gameMode = false;
+                    this.gameIsStarted = false;
+                    this.selectedQuizzMode = "realised";
+
+                    this._quizzService.getAllRealised(this.user.id)
+                        .subscribe(
+                            () => {
+                                this._changeDetectorRef.markForCheck();
+                            }
+                        );
 
                     // Mark for check
                     this._changeDetectorRef.markForCheck();
 
                 }
-            );
-    }
-
-    /**
-     * Unlike quizz
-     */
-    unlike(quizz){
-        this._quizzService.unlikeQuizz(quizz)
-            .subscribe(
-                () => {
-                    quizz.like = false;
-                },
-                (error) => {
-                    quizz.like = true;
-                },()=>{
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-
+                // If the confirm button pressed... redirect to sign-up page
+                else if ( result === 'cancelled' )
+                {
+                    return;
                 }
-            );
+            });
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+
+        } else {
+            this.gameMode = false;
+            this.gameIsStarted = false;
+            this.selectedQuizzMode = "realised";
+
+            this._quizzService.getAllRealised(this.user.id)
+                .subscribe(
+                    () => {
+                        this._changeDetectorRef.markForCheck();
+                    }
+                );
+
+            // Mark for check
+            this._changeDetectorRef.markForCheck();
+        }
+
     }
 
     /**
-     * Realised quizz
+     * Realised/history quizz
      */
     realisedQuizz(quizz){
 
@@ -276,38 +399,17 @@ export class QuizzsComponent
     }
 
     /**
-     * UnRealised quizz
-     */
-    unrealisedQuizz(quizz){
-        this._quizzService.unrealisedQuizz(quizz)
-            .subscribe(
-                () => {
-                    quizz.realise = false;
-                },
-                (error) => {
-                    quizz.realise = true;
-                },()=>{
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-
-                }
-            );
-    }
-
-    /**
      * Create comment
      */
     createComment(): void
     {
-        console.log(this.user)
 
         if (!this.user) {
 
             // Open the confirmation dialog
             const confirmation = this._fuseConfirmationService.open({
                 title       : 'Veuillez vous connecter !',
-                message     : 'Vous devez être conncté pour ajouter un commentaire. Créer votre compte ou connectez vous.',
+                message     : 'Vous devez être connecté pour ajouter un commentaire. Créer votre compte ou connectez vous.',
                 dismissible : true,
                 icon        : {
                     show : true,
@@ -408,14 +510,21 @@ export class QuizzsComponent
     }
 
     /**
-     * Close Quizz and return to lists
+     * Close Quiz game and return to quiz lists (communicate with child component "QuizzComponent")
      *
      * @param eventData
      */
     onBackFromQuizzGame(eventData: boolean) {
         this.gameMode = eventData;
+    }
 
-
+    /**
+     * Check if quizz is started in child component (communicate with child component "QuizzComponent")
+     *
+     * @param eventData
+     */
+    onQuizStartedStateChange(eventData: boolean) {
+        this.gameIsStarted = eventData;
     }
 
     /**

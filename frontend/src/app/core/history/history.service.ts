@@ -107,6 +107,24 @@ export class HistoryService
     }
 
     /**
+     * Get all histories by quizz id
+     *
+     * @param quizzId
+     */
+    getAllByQuizzId(quizzId): Observable<History[]>
+    {
+        return this._httpClient.get<any>(environment.backendUrl + 'histories/quizz/'  + quizzId).pipe(
+            tap((histories) => {
+                if(histories) {
+                    this._histories.next(histories);
+
+                    return histories;
+                }
+            })
+        );
+    }
+
+    /**
      * Get all histories by User id and Quiz id
      * @param userId
      * @param quizzId

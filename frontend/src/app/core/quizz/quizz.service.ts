@@ -227,40 +227,6 @@ export class QuizzService
     }
 
     /**
-     * UnRealised quizz
-     */
-    unrealisedQuizz(quizz): Observable<Quizz>
-    {
-        return this.quizzs$.pipe(
-            take(1),
-            switchMap(quizzs =>
-                this._httpClient.delete<any>(environment.backendUrl + 'history-quizz/' + quizz.realiseId,
-                ).pipe(
-                    map((response) => {
-
-                        if(response) {
-                            // Get the quizzs value
-                            const quizzs1 = this._quizzs.value;
-
-                            // Find the index of the updated quizz
-                            const indexQuizz = quizzs1.findIndex(item => item.id === quizz.id);
-
-                            // Update the like state
-                            quizzs1[indexQuizz].realise = true;
-
-                            // Update the quizz
-                            this._quizzs.next(quizzs1);
-
-                            return quizzs1;
-                        }else{
-                            return response;
-                        }
-                    })
-                ))
-        );
-    }
-
-    /**
      * Create comment
      */
     createComment(text: string, quizzId :string): Observable<Quizz>

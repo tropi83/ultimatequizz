@@ -34,7 +34,7 @@ export class QuizzResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Quizz[]>
     {
 
-        return this._quizzService.getAll()
+        return this._quizzService.getAll('desc')
             .pipe(
                 catchError((error) => {
 
