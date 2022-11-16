@@ -15,5 +15,7 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
 
     List<History> findByUserAndQuizz(Optional<User> user, Optional<Quizz> quizz);
 
+    List<History> findByQuizzOrderByPointsDesc(Optional<Quizz> quizz);
+
 
 }

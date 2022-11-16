@@ -67,6 +67,11 @@ public class HistoryServiceImpl implements HistoryService {
 	}
 
 	@Override
+	public List<History> getHistoriesByQuizz(Optional<Quizz> quizz) {
+		return historyRepository.findByQuizzOrderByPointsDesc(quizz);
+	}
+
+	@Override
 	public Optional<History> getHistoryById(int id) {
 		return historyRepository.findById(id);
 	}

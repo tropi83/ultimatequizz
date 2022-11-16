@@ -72,7 +72,7 @@
                 Meilleurs scores
             </button>
             <button
-                *ngIf="quizzIsStarted === false || quizzIsStarted && progress === 100"
+                *ngIf="(quizzIsStarted === false && user !== undefined) || (quizzIsStarted && progress === 100 && user !== undefined)"
                 class="px-6 mt-8"
                 mat-flat-button
                 [color]="'accent-300'"

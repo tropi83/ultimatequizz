@@ -57,6 +57,19 @@ public class HistoryController {
         }
     }
 
+    @GetMapping("histories/quizz/{quizzId}")
+    public ResponseEntity<List<History>> getHistoryByQuizz(@PathVariable("quizzId") int quizzId) {
+        Optional<Quizz> existQuizz = quizzService.getQuizzById(quizzId);
+        if (existQuizz.isPresent())
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(this.historyService.getHistoriesByQuizz(existQuizz));
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("histories/user/{userId}/quizz/{quizzId}")
     public ResponseEntity<List<History>> getHistoryByUserAndByQuizz(@PathVariable("userId") int userId, @PathVariable("quizzId") int quizzId)
     {

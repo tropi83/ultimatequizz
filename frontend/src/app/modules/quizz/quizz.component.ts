@@ -102,19 +102,9 @@ export class QuizzComponent implements OnInit, AfterViewInit{
             // Add history
             this.historyService.createHistory(this.points, this.time, this.quizz.id)
                 .subscribe(
-                    (history) => {
-
-                        console.log(history)
-                        console.log('totototototo')
-
-
-
-                    },
-                    (error) => {
-                    },
-                    () => {
-
-                    }
+                    () => {},
+                    (error) => {},
+                    () => {}
                 );
         }
 
@@ -332,39 +322,42 @@ export class QuizzComponent implements OnInit, AfterViewInit{
      * Show Quiz history by quizz and user
      */
     showHistory(){
-        this.historyService.getAllByUserIdAndQuizzId(this.user.id, this.quizz.id)
-            .subscribe(
-                (histories) => {
 
-                    // Open the confirmation dialog
-                    this._fuseConfirmationService.open({
-                        title           : 'Historique',
-                        message         : '',
-                        isHistory       : true,
-                        historiesData   : histories,
-                        dismissible     : true,
-                        icon       : {
-                            show : true,
-                            name : 'heroicons_solid:archive',
-                            color: 'primary'
-                        },
-                        actions    : {
-                            confirm: {
+        if(this.user !== undefined && this.user && this.user.id) {
+            this.historyService.getAllByUserIdAndQuizzId(this.user.id, this.quizz.id)
+                .subscribe(
+                    (histories) => {
+
+                        // Open the confirmation dialog
+                        this._fuseConfirmationService.open({
+                            title           : 'Historique',
+                            message         : '',
+                            isHistory       : true,
+                            historiesData   : histories,
+                            dismissible     : true,
+                            icon       : {
                                 show : true,
-                                label: 'Quitter',
+                                name : 'heroicons_solid:archive',
                                 color: 'primary'
                             },
-                            cancel: {
-                                show : false,
-                                label: 'Quitter'
+                            actions    : {
+                                confirm: {
+                                    show : true,
+                                    label: 'Quitter',
+                                    color: 'primary'
+                                },
+                                cancel: {
+                                    show : false,
+                                    label: 'Quitter'
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-                }
-            );
+                        // Mark for check
+                        this._changeDetectorRef.markForCheck();
+                    }
+                );
+        }
     }
 
     /**

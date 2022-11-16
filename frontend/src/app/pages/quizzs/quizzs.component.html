@@ -94,13 +94,13 @@
                     (click)="getAllRealised();"
                     class="px-3 mr-1 -ml-2 sm:ml-0"
                     mat-button>
-                    <span *ngIf="selectedQuizzMode === 'realised'" class="flex sm:items-center font-medium cursor-pointer">
+                    <span *ngIf="selectedQuizzMode === 'realised' && user !== undefined;" class="flex sm:items-center font-medium cursor-pointer">
                         <mat-icon
                             class="icon-size-5 mr-3 leading-6 text-primary"
                             [svgIcon]="'heroicons_solid:save'"></mat-icon>
                         Réalisés
                     </span>
-                    <span *ngIf="selectedQuizzMode !== 'realised'" class="flex sm:items-center text-secondary cursor-pointer">
+                    <span *ngIf="selectedQuizzMode !== 'realised' && user !== undefined;" class="flex sm:items-center text-secondary cursor-pointer">
                         <mat-icon
                             class="icon-size-5 mr-3 leading-6"
                             [svgIcon]="'heroicons_solid:save'"></mat-icon>

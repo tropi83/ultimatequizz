@@ -37,9 +37,6 @@ export class HistoryService
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((user: User) => {
                 this.user = user;
-
-                console.log(this.user)
-
             });
     }
 
@@ -160,8 +157,6 @@ export class HistoryService
                     }
                 ).pipe(
                     map((response) => {
-
-                        console.log(response)
 
                         if(response) {
                             // Update the challenges with the new challenge
