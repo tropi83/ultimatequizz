@@ -161,6 +161,8 @@ export class HistoryService
                 ).pipe(
                     map((response) => {
 
+                        console.log(response)
+
                         if(response) {
                             // Update the challenges with the new challenge
                             this._historiesByUser.next([response, ...histories]);

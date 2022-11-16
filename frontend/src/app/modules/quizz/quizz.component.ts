@@ -95,54 +95,65 @@ export class QuizzComponent implements OnInit, AfterViewInit{
      */
     displayEndOfGame() {
 
-        this.pauseTimer()
+        this.pauseTimer();
+        this._changeDetectorRef.markForCheck();
 
-        // Add history
-        this.historyService.createHistory(this.points, this.time, this.quizz.id)
-            .subscribe(
-                () => {
+        if (this.user) {
+            // Add history
+            this.historyService.createHistory(this.points, this.time, this.quizz.id)
+                .subscribe(
+                    (history) => {
+
+                        console.log(history)
+                        console.log('totototototo')
+
+
+
+                    },
+                    (error) => {
+                    },
+                    () => {
+
+                    }
+                );
+        }
+
+        // Open the confirmation dialog
+        const confirmation = this._fuseConfirmationService.open({
+            title       : 'Quizz terminé !',
+            message     : 'Score: ' + this.points + '<br>' + 'Temps: ' + this.time+ '<br>' + 'Ratio: ' + (this.points / this.time).toString().substring(0, 6),
+            dismissible : true,
+            icon        : {
+                show : true,
+                name : 'heroicons_solid:shield-check',
+                color: 'primary'
+            },
+            actions     : {
+                confirm: {
+                    show : true,
+                    label: 'Quitter',
+                    color: 'primary'
                 },
-                (error) => {
-                },
-                () => {
-
-                    // Open the confirmation dialog
-                    const confirmation = this._fuseConfirmationService.open({
-                        title       : 'Quizz terminé !',
-                        message     : 'Score: ' + this.points,
-                        dismissible : true,
-                        icon        : {
-                            show : true,
-                            name : 'heroicons_solid:shield-check',
-                            color: 'primary'
-                        },
-                        actions     : {
-                            confirm: {
-                                show : true,
-                                label: 'Quitter',
-                                color: 'primary'
-                            },
-                            cancel : {
-                                show : true,
-                                label: 'Recommencer'
-                            }
-                        }
-                    });
-
-                    // Subscribe to the confirmation dialog closed action
-                    confirmation.afterClosed().subscribe(async (result) => {
-
-                        // If the confirm button pressed...
-                        if ( result === 'cancelled' )
-                        {
-                            await this.restartQuizzGame();
-                        }
-                    });
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
+                cancel : {
+                    show : true,
+                    label: 'Recommencer'
                 }
-            );
+            }
+        });
+
+        // Subscribe to the confirmation dialog closed action
+        confirmation.afterClosed().subscribe(async (result) => {
+
+            // If the confirm button pressed...
+            if ( result === 'cancelled' )
+            {
+                await this.restartQuizzGame();
+            }
+        });
+
+        // Mark for check
+        this._changeDetectorRef.markForCheck();
+
     }
 
     /**

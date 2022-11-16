@@ -129,11 +129,11 @@ export class AuthService
      *
      * @param email
      * @param username
-     * @param password
-     * @param lastname
      * @param firstname
+     * @param lastname
+     * @param password
      */
-    signUp(email: string, username: string, password: string, lastname: string, firstname: string ): Observable<any>
+    signUp(email: string, username: string, firstname: string, lastname: string, password: string): Observable<any>
     {
         return this._httpClient.post(environment.backendUrl + 'register',
             {
