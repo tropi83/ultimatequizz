@@ -63,6 +63,8 @@ INSERT INTO themes(name) VALUES ('Politique');
 INSERT INTO themes(name) VALUES ('Sciences');
 INSERT INTO themes(name) VALUES ('Marques & logo');
 INSERT INTO themes(name) VALUES ('Actualité');
+INSERT INTO themes(name) VALUES ('Manga');
+INSERT INTO themes(name) VALUES ('Jeux-vidéo');
 
 /*
  * Insertion des quizzs
@@ -127,6 +129,28 @@ VALUES (
            3
        );
 
+INSERT INTO quizzs(name, description, is_active, creation_date, update_date, theme_id)
+VALUES (
+           'Quiz One Piece',
+           'Êtes-vous un vrai fan de One Piece ?',
+           true,
+           '2022-11-16',
+           '2022-11-16',
+           11
+
+       );
+
+INSERT INTO quizzs(name, description, is_active, creation_date, update_date, theme_id)
+VALUES (
+           'Quiz World of Warcraft',
+           'A la découverte du plus gros MMO de tout les temps ?',
+           true,
+           '2022-11-16',
+           '2022-11-16',
+           12
+
+       );
+
 /*
  * Insertion des questions
  */
@@ -159,6 +183,18 @@ INSERT INTO questions(label, quizz_id) VALUES ('Quelle est la capitale de l’î
 INSERT INTO questions(label, quizz_id) VALUES ('Quel volcan célèbre se situe sur l’île de la Réunion ?', 5);
 INSERT INTO questions(label, quizz_id) VALUES ('Quelle est la superficie de l’île de la Réunion ?', 5);
 INSERT INTO questions(label, quizz_id) VALUES ('Quel est le point culminant de l’île de la Réunion ?', 5);
+
+INSERT INTO questions(label, quizz_id) VALUES ('Qui est le mangaka de One Piece ?', 6);
+INSERT INTO questions(label, quizz_id) VALUES ('En quelle année est sorti le premier chapitre ?', 6);
+INSERT INTO questions(label, quizz_id) VALUES ('Comment se nomme le personnage principal ?', 6);
+INSERT INTO questions(label, quizz_id) VALUES ('Qui été le "Roi des Pirates" ?', 6);
+INSERT INTO questions(label, quizz_id) VALUES ('Quel est le fruit du démon de Luffy ?', 6);
+
+INSERT INTO questions(label, quizz_id) VALUES ('Quelle entreprise a crée WoW ?', 7);
+INSERT INTO questions(label, quizz_id) VALUES ('Quel est le monde ou se déroule WoW ?', 7);
+INSERT INTO questions(label, quizz_id) VALUES ('Quel est le vrai nom du Roi Liche ?', 7);
+INSERT INTO questions(label, quizz_id) VALUES ('Qui a déclenché le Cataclysme ?', 7);
+INSERT INTO questions(label, quizz_id) VALUES ('Quel est le nom de la toute première extension ?', 7);
 
 /*
  * Insertion des réponses
@@ -269,6 +305,52 @@ INSERT INTO answers(label, is_correct, question_id) VALUES ('Le Piton des neiges
 INSERT INTO answers(label, is_correct, question_id) VALUES ('Le Piton rouge', false, 25);
 INSERT INTO answers(label, is_correct, question_id) VALUES ('Le Bonnet de Prêtre', false, 25);
 
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Masashi Kishimoto', false, 26);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Eiichirō Oda', true, 26);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Hirohiko Araki', false, 26);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Hayao Miyazaki', false, 26);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('1997', true, 27);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('1999', false, 27);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('2001', false, 27);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('2002', false, 27);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Roronoa Zoro', false, 28);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Sniper King', false, 28);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Thousand Sunny', false, 28);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Monkey D. Luffy', true, 28);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Gol D. Roger', true, 29);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Monkey D. Dragon', false, 29);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Monkey D. Garp', false, 29);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Boa Hancock', false, 29);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Fruit de la foudre', false, 30);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Fruit du Gum-Gum', true, 30);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Fruit des rois', false, 30);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Fruit du temps', false, 30);
+
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Blizzard', true, 31);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Activision', false, 31);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Treyarch', false, 31);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Nintendo', false, 31);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Hyrule', false, 32);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Bordeciel', false, 32);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Azéroth', true, 32);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('La Terre', false, 32);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Arthas Menethil', true, 33);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Varian Wrynn', false, 33);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Grommash Hurlenfer', false, 33);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Sylvanas Coursevent', false, 33);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Alexstraza', false, 34);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Aile-de-mort', true, 34);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Ysera', false, 34);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Nozdormu', false, 34);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Wrath of the Lich King', false, 34);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Battle for Azeroth', false, 34);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Burning Crusade', true, 34);
+INSERT INTO answers(label, is_correct, question_id) VALUES ('Cataclysm', false, 34);
+
+
+
+
+
 /*
  * Insertion des historiques
  */
@@ -324,8 +406,4 @@ INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-0
 INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Le thème ne correspond pas vraiment aux questions.', 1, 7);
 INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Super !', 3, 8);
 INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', 'J''aime les sandwitchs à la fraise !', 1, 10);
-INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Sympa !', 4, 8);
-INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-14', 'Absurde...', 4, 3);
-INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', 'Dingue !', 1, 10);
-INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-18', 'Rarement fait mieux !', 4, 8);
 
