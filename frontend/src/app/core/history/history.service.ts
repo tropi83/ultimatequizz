@@ -91,19 +91,20 @@ export class HistoryService
     /**
      * Get all histories by user id
      *
-     * @param userId
      */
-    getAllByUserId(userId): Observable<History[]>
+    getAllByUserId(): Observable<History[]>
     {
-        return this._httpClient.get<any>(environment.backendUrl + 'histories/user/'  + userId).pipe(
-            tap((histories) => {
-                if(histories) {
-                    this._historiesByUser.next(histories);
+        if(this.user && this.user.id){
+            return this._httpClient.get<any>(environment.backendUrl + 'histories/user/'  + this.user.id).pipe(
+                tap((histories) => {
+                    if(histories) {
+                        this._historiesByUser.next(histories);
 
-                    return histories;
-                }
-            })
-        );
+                        return histories;
+                    }
+                })
+            );
+        }
     }
 
     /**
@@ -152,7 +153,7 @@ export class HistoryService
             switchMap(histories =>
                 this._httpClient.post<any>(environment.backendUrl + 'histories',
                     {
-                        point    : points,
+                        points   : points,
                         time     : time,
                         quizz_id : quizzId,
                         user_id  : this.user.id,

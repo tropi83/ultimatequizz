@@ -50,16 +50,12 @@ export class UserService
         let token = localStorage.getItem('accessToken');
         return this._httpClient.get<any>(environment.backendUrl + '/login' + token).pipe(
             tap((response) => {
-                console.log(response)
 
-                    if(response.success) {
-                        if (response.data) {
-                            if(response && response.data && response.data.user){
-                                this._user.next(response.data.user);
-                            }else{
-                                this._user.error('User not found');
-                            }
-                        }
+                    if(response.user) {
+                        this._user.next(response.data.user);
+
+                    }else{
+                        this._user.error('User not found');
                     }
             },
             (error) => {

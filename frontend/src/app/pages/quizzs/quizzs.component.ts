@@ -9,10 +9,10 @@ import { FuseAlertType } from "../../../@fuse/components/alert";
 import { FuseConfirmationService } from "../../../@fuse/services/confirmation";
 import { MatSelectChange } from "@angular/material/select";
 import { Theme } from "../../core/theme/theme.types";
-import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { ThemeService } from "../../core/theme/theme.service";
 import { Router } from "@angular/router";
 import { HistoryService } from "../../core/history/history.service";
+import { FuseLoadingService } from "../../../@fuse/services/loading";
 
 @Component({
     selector       : 'quizzs',
@@ -38,11 +38,11 @@ export class QuizzsComponent
     showAlertComment: boolean = false;
 
     filters: {
-        themeSlug$: BehaviorSubject<string>;
+        themeName$: BehaviorSubject<string>;
         query$: BehaviorSubject<string>;
         hideCompleted$: BehaviorSubject<boolean>;
     } = {
-        themeSlug$ : new BehaviorSubject('all'),
+        themeName$ : new BehaviorSubject('all'),
         query$        : new BehaviorSubject(''),
         hideCompleted$: new BehaviorSubject(false)
     };
@@ -55,11 +55,13 @@ export class QuizzsComponent
     quizzs: Quizz[];
 
     selectedQuizz: Quizz;
-    selectedQuizzMode: string = "all";
+    selectedQuizzMode: 'latest' | 'oldest' | 'realised' = 'latest';
 
     /* todo remove */
-    gameMode: boolean = true;
+    gameMode: boolean = false;
     gameIsStarted: boolean = false;
+
+    isLoading: boolean = false;
 
     /**
      * Constructor
@@ -72,7 +74,8 @@ export class QuizzsComponent
         private _quizzService: QuizzService,
         private _historyService: HistoryService,
         private _themeService: ThemeService,
-        private _fuseConfirmationService: FuseConfirmationService
+        private _fuseConfirmationService: FuseConfirmationService,
+        private _fuseLoadingService: FuseLoadingService
     )
     {
         // Subscribe to user changes
@@ -121,7 +124,7 @@ export class QuizzsComponent
     {
         // Create the comment form
         this.commentForm = this._formBuilder.group({
-            text  : ['', [Validators.required, Validators.minLength(4), Validators.maxLength(139)]]
+            text  : ['', [Validators.required, Validators.minLength(4), Validators.maxLength(1025)]]
             }
         );
 
@@ -134,6 +137,7 @@ export class QuizzsComponent
      * Switch quizz
      */
     switchSelectedQuizz(quizz){
+
         this.selectedQuizz = quizz;
 
         // Mark for check
@@ -145,6 +149,9 @@ export class QuizzsComponent
      * Get all quiz by date asc (default)
      */
     getAll(){
+
+        this.isLoading = true;
+        this.filters.themeName$.next('all');
 
         if(this.gameIsStarted){
             // Open the confirmation dialog
@@ -178,18 +185,14 @@ export class QuizzsComponent
                 {
                     this.gameMode = false;
                     this.gameIsStarted = false;
-                    this.selectedQuizzMode = "all";
+                    this.selectedQuizzMode = "latest";
                     this._quizzService.getAll()
                         .subscribe(
                             (quizzs) => {
                                 this.quizzs = quizzs;
-                                this._changeDetectorRef.markForCheck();
+                                this.isLoading = false;
                             }
                         );
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-
                 }
                 // If the confirm button pressed... redirect to sign-up page
                 else if ( result === 'cancelled' )
@@ -198,18 +201,15 @@ export class QuizzsComponent
                 }
             });
 
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-
         } else {
             this.gameMode = false;
             this.gameIsStarted = false;
-            this.selectedQuizzMode = "all";
+            this.selectedQuizzMode = "latest";
             this._quizzService.getAll()
                 .subscribe(
                     (quizzs) => {
                         this.quizzs = quizzs;
-                        this._changeDetectorRef.markForCheck();
+                        this.isLoading = false;
                     }
                 );
 
@@ -224,7 +224,10 @@ export class QuizzsComponent
      */
     getOldest(){
 
-        if(this.gameIsStarted){
+        this.isLoading = true;
+        this.filters.themeName$.next('all');
+
+        if (this.gameIsStarted) {
             // Open the confirmation dialog
             const confirmation = this._fuseConfirmationService.open({
                 title       : 'Quizz en cours !',
@@ -261,14 +264,10 @@ export class QuizzsComponent
                     this._quizzService.getAll('asc')
                         .subscribe(
                             (quizzs) => {
+                                this.isLoading = false;
                                 this.quizzs = quizzs;
-                                this._changeDetectorRef.markForCheck();
                             }
                         );
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-
                 }
                 // If the confirm button pressed... redirect to sign-up page
                 else if ( result === 'cancelled' )
@@ -276,9 +275,6 @@ export class QuizzsComponent
                    return;
                 }
             });
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
 
         } else {
             this.gameMode = false;
@@ -288,14 +284,14 @@ export class QuizzsComponent
             this._quizzService.getAll('asc')
                 .subscribe(
                     (quizzs) => {
+                        this.isLoading = false;
                         this.quizzs = quizzs;
-                        this._changeDetectorRef.markForCheck();
                     }
                 );
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
         }
+
+        // Mark for check
+        this._changeDetectorRef.markForCheck();
 
     }
 
@@ -303,6 +299,9 @@ export class QuizzsComponent
      * Get all quizz realised/history
      */
     getAllRealised(){
+
+        this.isLoading = true;
+        this.filters.themeName$.next('all');
 
         if(this.gameIsStarted){
             // Open the confirmation dialog
@@ -341,13 +340,10 @@ export class QuizzsComponent
                     this._quizzService.getAllRealised(this.user.id)
                         .subscribe(
                             () => {
+                                this.isLoading = false;
                                 this._changeDetectorRef.markForCheck();
                             }
                         );
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-
                 }
                 // If the confirm button pressed... redirect to sign-up page
                 else if ( result === 'cancelled' )
@@ -355,10 +351,6 @@ export class QuizzsComponent
                     return;
                 }
             });
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-
         } else {
             this.gameMode = false;
             this.gameIsStarted = false;
@@ -367,6 +359,7 @@ export class QuizzsComponent
             this._quizzService.getAllRealised(this.user.id)
                 .subscribe(
                     () => {
+                        this.isLoading = false;
                         this._changeDetectorRef.markForCheck();
                     }
                 );
@@ -378,7 +371,7 @@ export class QuizzsComponent
     }
 
     /**
-     * Realised/history quizz
+     * Realised/ add history quizz
      */
     realisedQuizz(quizz){
 
@@ -393,7 +386,6 @@ export class QuizzsComponent
 
                     // Mark for check
                     this._changeDetectorRef.markForCheck();
-
                 }
             );
     }
@@ -403,7 +395,6 @@ export class QuizzsComponent
      */
     createComment(): void
     {
-
         if (!this.user) {
 
             // Open the confirmation dialog
@@ -462,9 +453,10 @@ export class QuizzsComponent
             this.showAlertComment = false;
 
             // Add Comment
-            this._quizzService.createComment(this.commentForm.controls['text'].value, this.selectedQuizz.id)
+            this._quizzService.createComment(this.commentForm.controls['text'].value, this.user.id, this.selectedQuizz.id)
                 .subscribe(
-                    () => {
+                    (comment) => {
+
                         this.alertComment = {
                             type   : 'success',
                             message: 'Commentaire crée avec succès.',
@@ -495,7 +487,6 @@ export class QuizzsComponent
                 );
         }
 
-
     }
 
     /**
@@ -504,9 +495,11 @@ export class QuizzsComponent
      * @param quizz
      */
     playQuizzGame(quizz: Quizz){
+        this.isLoading = true;
         this.gameMode = true;
         this.selectedQuizz = quizz;
         this._changeDetectorRef.markForCheck();
+        this.isLoading = false;
     }
 
     /**
@@ -528,24 +521,24 @@ export class QuizzsComponent
     }
 
     /**
-     * Show/hide completed courses
-     *
-     * @param change
-     */
-    toggleCompleted(change: MatSlideToggleChange): void
-    {
-        this.filters.hideCompleted$.next(change.checked);
-    }
-
-
-    /**
-     * Filter by theme
+     * Filter by theme select input
      *
      * @param change
      */
     filterByTheme(change: MatSelectChange): void
     {
-        this.filters.themeSlug$.next(change.value);
+        this.isLoading = true;
+        if(change.value){
+            this._quizzService.getAllByTheme(change.value)
+                .subscribe(
+                    (quizzs) => {
+                        this.quizzs = quizzs;
+                        this.isLoading = false;
+                        this._changeDetectorRef.markForCheck();
+                    }
+                );
+            this.filters.themeName$.next(change.value);
+        }
     }
 
     /**
@@ -555,9 +548,60 @@ export class QuizzsComponent
      */
     filterByQuery(query: string): void
     {
+        this.isLoading = true;
+
+        // Filter by search query
+        if ( query !== '' )
+        {
+            this.quizzs = this.quizzs.filter(quizz => quizz.name.toLowerCase().includes(query.toLowerCase()));
+            this.isLoading = false;
+        }
+        else {
+            if (this.filters.themeName$.value === 'all') {
+                if (this.selectedQuizzMode === "latest") {
+                    this._quizzService.getAll('desc')
+                        .subscribe(
+                            (quizzs) => {
+                                this.quizzs = quizzs;
+                                this.isLoading = false;
+                                this._changeDetectorRef.markForCheck();
+                            }
+                        );
+                }
+                else if (this.selectedQuizzMode === "oldest") {
+                    this._quizzService.getAll('asc')
+                        .subscribe(
+                            (quizzs) => {
+                                this.quizzs = quizzs;
+                                this.isLoading = false;
+                                this._changeDetectorRef.markForCheck();
+                            }
+                        );
+                }
+                else if (this.selectedQuizzMode === "realised") {
+                    this._quizzService.getAllRealised(this.user.id)
+                        .subscribe(
+                            () => {
+                                this.isLoading = false;
+                                this._changeDetectorRef.markForCheck();
+                            }
+                        );
+                }
+            }
+            else {
+                this._quizzService.getAllByTheme(this.filters.themeName$.value)
+                    .subscribe(
+                        (quizzs) => {
+                            this.quizzs = quizzs;
+                            this.isLoading = false;
+                            this._changeDetectorRef.markForCheck();
+                        }
+                    );
+            }
+        }
+
         this.filters.query$.next(query);
     }
-
 
     /**
      * Track by function for ngFor loops
@@ -569,5 +613,4 @@ export class QuizzsComponent
     {
         return item.id || index;
     }
-
 }

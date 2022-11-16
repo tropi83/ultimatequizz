@@ -2,23 +2,28 @@
 /*
  * Insertion des utilisateurs
  */
-INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date)
-VALUES ('string', 'string', 'string', 'string@string.com', '$2a$10$i21Bm9O9rc/gVK.wW9Crou/U1Oi9ncaM6DQfs2Mq6XumpJqywGMaG', 'ADMIN', '2020-11-13');
+INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date, description)
+VALUES ('string', 'string', 'string', 'string@string.com', '$2a$10$i21Bm9O9rc/gVK.wW9Crou/U1Oi9ncaM6DQfs2Mq6XumpJqywGMaG', 'ADMIN', '2020-11-13', 'Hey !
+Je suis l''administrateur pour le swagger');
 
-INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date)
-VALUES ('admin', 'admin', 'admin', 'admin@admin.com', '$2a$10$c87hqDvBarrevbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'ADMIN', '2021-11-13');
+INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date, description)
+VALUES ('admin', 'admin', 'admin', 'admin@admin.com', '$2a$10$c87hqDvBarrevbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'ADMIN', '2021-11-13', 'Hello !
+Je suis l''administrateur pour le frontend');
 
-INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date)
-VALUES ('bob', 'Bob', 'Le bricoleur', 'bob@bob.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'ADMIN', '2022-11-13');
+INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date, description)
+VALUES ('bob', 'Bob', 'Le bricoleur', 'bob@bob.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'ADMIN', '2022-11-13', 'Hello !
+Je suis administrateur, et jamais à court d''idées pour surmonter les obstacles.');
 
-INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date)
-VALUES ('alice', 'Alice', 'Adsl', 'alice@alice.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'ADMIN', '2022-10-13');
+INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date, description)
+VALUES ('alice', 'Alice', 'Adsl', 'alice@alice.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'ADMIN', '2022-10-13', 'Salut !
+Je suis administrateur, et un fournisseur d''accès à Internet.');
 
-INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date)
-VALUES ('string2', 'string2', 'string2', 'string2@string2.com', '$2a$10$i21Bm9O9rc/gVK.wW9Crou/U1Oi9ncaM6DQfs2Mq6XumpJqywGMaG', 'USER', '2022-09-09');
+INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date, description)
+VALUES ('string2', 'string2', 'string2', 'string2@string2.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'USER', '2022-10-13', 'Hola Senior !
+Je suis utilisateur pour le swagger');
 
-INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date)
-VALUES ('michelle', 'Michelle', 'Obama', 'michelle@obama.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'USER', '2022-04-17');
+INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date, description)
+VALUES ('michelle', 'Michelle', 'Obama', 'michelle@obama.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'USER', '2022-04-17', 'Je l''épouse depuis 1992 de Barack Obama');
 
 INSERT INTO users(username, firstname, lastname, email, password, user_role, creation_date)
 VALUES ('michel', 'Michel', 'Polnareff', 'michel@polnareff.com', '$2a$10$c87hqDvBarvbgR2a3X0hxe7WlWAZla8NNtFfiMg92XtOfPl3pd29i', 'USER', '2022-05-22');
@@ -267,39 +272,56 @@ INSERT INTO answers(label, is_correct, question_id) VALUES ('Le Bonnet de Prêtr
 /*
  * Insertion des historiques
  */
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 20, 100.12, 1, 1);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-14', 10,   62.2, 2, 1);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10,  250.3, 3, 1);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 20, 100.12, 1, 1);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-14', 10,   62.2, 2, 1);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10,  250.3, 3, 1);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 20, 140.44, 1, 2);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10,  62.21, 2, 2);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-14', 10,  42.12, 3, 2);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 20, 140.44, 1, 2);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10,  62.21, 2, 2);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-14', 10,  42.12, 3, 2);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 20, 240.44, 1, 3);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 10, 240.44, 2, 3);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10, 340.44, 3, 3);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 20, 240.44, 1, 3);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 10, 240.44, 2, 3);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10, 340.44, 3, 3);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 540.33, 1, 4);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 10,  40.24, 2, 4);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10, 240.11, 3, 4);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 540.33, 1, 4);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 10,  40.24, 2, 4);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-13', 10, 240.11, 3, 4);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 5140.13, 1, 5);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 10,  340.03, 2, 5);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10,  240.33, 3, 5);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 10,  740.43, 4, 5);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 5140.13, 1, 5);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 10,  340.03, 2, 5);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10,  240.33, 3, 5);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 10,  740.43, 4, 5);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 20, 510.13, 1, 6);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 10, 340.03, 2, 6);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-14', 10, 740.43, 4, 6);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 20, 510.13, 1, 6);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-12', 10, 340.03, 2, 6);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-14', 10, 740.43, 4, 6);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 20, 40.13, 1, 7);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 20, 40.13, 1, 7);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20,  540.13, 2, 8);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10, 1240.33, 3, 8);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 10, 1040.43, 5, 8);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20,  540.13, 2, 8);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10, 1240.33, 3, 8);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-15', 10, 1040.43, 5, 8);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 5140.13, 1, 9);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10,  540.33, 5, 9);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 5140.13, 1, 9);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10,  540.33, 5, 9);
 
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 622.13, 5, 10);
-INSERT INTO history (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10, 100.33, 5, 10);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-11', 20, 622.13, 5, 10);
+INSERT INTO histories (creation_date, points, time, quizz_id, user_id) VALUES ('2022-11-16', 10, 100.33, 5, 10);
+
+/*
+ * Insertion des commentaires
+ */
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-17', 'Super !', 2, 1);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', 'Au top !', 5, 1);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-18', 'Complètement nul, pas assez de questions !', 3, 2);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', ':) !', 5, 2);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-14', 'Trop court !', 5, 3);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-11', 'Génial ce quizz !', 1, 4);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', 'Trop long !', 2, 5);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-09', 'J''adore les animaux !', 5, 6);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-01', 'Super !', 5, 7);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Le thème ne correspond pas vraiment aux questions.', 1, 7);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Super !', 3, 8);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', 'J''aime les sandwitchs à la fraise !', 1, 10);
+

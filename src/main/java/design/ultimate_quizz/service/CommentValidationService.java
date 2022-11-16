@@ -1,10 +1,8 @@
 package design.ultimate_quizz.service;
 
-import design.ultimate_quizz.exceptions.history.HistoryException;
-import design.ultimate_quizz.exceptions.quizz.QuizzException;
+import design.ultimate_quizz.exceptions.comment.CommentException;
 import design.ultimate_quizz.repository.UserRepository;
 import design.ultimate_quizz.security.dto.comment.CommentRequest;
-import design.ultimate_quizz.security.dto.quizz.QuizzRequest;
 import design.ultimate_quizz.utils.ExceptionMessageAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +14,26 @@ import org.springframework.stereotype.Service;
 public class CommentValidationService {
 
     private static final String USER_NOT_FOUND = "user_id_not_found";
+    private static final String QUIZZ_NOT_FOUND = "quizz_id_not_found";
     private static final String COMMENT_TEXT_TO0_LONG = "comment_text_too_long";
-
 
     private final UserRepository userRepository;
 
+    private final UserRepository quizzRepository;
+
     private final ExceptionMessageAccessor exceptionMessageAccessor;
 
+    public void validateComment(CommentRequest commentRequest) {
+
+        final String commentText = commentRequest.getText();
+        final int userId = commentRequest.getUser_id();
+        checkUserExist(userId);
+
+        final int quizzId = commentRequest.getQuizz_id();
+        checkQuizzExist(quizzId);
+
+        checkCommentTextLength(commentText);
+    }
 
     private void checkUserExist(int userId) {
 
@@ -33,19 +44,21 @@ public class CommentValidationService {
             log.warn("{} User not found with this id !", userId);
             final String userNotExist = exceptionMessageAccessor.getMessage(null, USER_NOT_FOUND);
 
-            throw new HistoryException(userNotExist);
+            throw new CommentException(userNotExist);
         }
     }
 
+    private void checkQuizzExist(int quizzId) {
 
-    public void validateComment(CommentRequest commentRequest) {
+        final boolean existsQuizzById = quizzRepository.existsById(quizzId);
 
-        final String commentText = commentRequest.getText();
-        final String commentCreationDate = commentRequest.getCreationDate();
-        final int userId = commentRequest.getUser_id();
-        checkUserExist(userId);
+        if (!existsQuizzById) {
 
-        checkCommentTextLength(commentText);
+            log.warn("{} Quizz not found with this id !", quizzId);
+            final String quizzNotExist = exceptionMessageAccessor.getMessage(null, QUIZZ_NOT_FOUND);
+
+            throw new CommentException(quizzNotExist);
+        }
     }
 
     private void checkCommentTextLength(String commentText) {
@@ -54,7 +67,7 @@ public class CommentValidationService {
             log.warn("{} comment text is too long ! 1024 characters max", commentText);
             final String messageTooLong = exceptionMessageAccessor.getMessage(null, COMMENT_TEXT_TO0_LONG);
 
-            throw new QuizzException(messageTooLong);
+            throw new CommentException(messageTooLong);
         }
     }
 

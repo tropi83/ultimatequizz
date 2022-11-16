@@ -14,6 +14,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findByUser(Optional<User> user);
 
+    List<Comment> findByQuizzOrderByCreationDateAsc(Optional<Quizz> quizz);
+
     List<Comment> findAllByOrderByCreationDateAsc();
 
     List<Comment> findAllByOrderByCreationDateDesc();

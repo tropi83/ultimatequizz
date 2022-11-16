@@ -9,22 +9,21 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseCardModule } from '@fuse/components/card';
 import { SharedModule } from 'app/shared/shared.module';
-import { QuizzsComponent } from 'app/pages/quizzs/quizzs.component';
+import { CommentsComponent } from 'app/modules/comments/comments.component';
 import { SettingsModule } from "../../layout/common/settings/settings.module";
 import { FuseFullscreenModule } from "../../../@fuse/components/fullscreen";
 import { quizzRoutes } from 'app/pages/quizzs/quizzs.routing';
 import { UserModule } from "../../layout/common/user/user.module";
 import { FuseAlertModule } from "../../../@fuse/components/alert";
 import { FuseConfirmationModule } from "../../../@fuse/services/confirmation";
-import { QuizzModule } from "../../modules/quizz/quizz.module";
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSelectModule } from '@angular/material/select';
-import { CommentsModule } from "../../modules/comments/comments.module";
-import { FuseLoadingBarModule } from '@fuse/components/loading-bar';
+import { ProgressBarModule } from "../progress-bar/progress-bar.module";
 
 @NgModule({
     declarations: [
-        QuizzsComponent
+        CommentsComponent
+    ],
+    exports: [
+        CommentsComponent
     ],
     imports: [
         RouterModule.forChild(quizzRoutes),
@@ -42,13 +41,9 @@ import { FuseLoadingBarModule } from '@fuse/components/loading-bar';
         UserModule,
         FuseAlertModule,
         FuseConfirmationModule,
-        QuizzModule,
-        MatSlideToggleModule,
-        MatSelectModule,
-        CommentsModule,
-        FuseLoadingBarModule
+        ProgressBarModule
     ]
 })
-export class QuizzsModule
+export class CommentsModule
 {
 }

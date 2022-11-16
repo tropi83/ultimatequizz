@@ -37,12 +37,24 @@ public class Quizz {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Theme theme;
 
-    // TODO DATE CREATE QUIZZ HISTO + DEZSCIRPYION USER
-
     @OneToMany(mappedBy = "quizz", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
-    public Quizz(int id, String name, String description, LocalDate creationDate, LocalDate updateDate, Boolean isActive, Theme theme, List<Question> questions) {
+    @OneToMany(mappedBy = "quizz", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<Comment> comments = new ArrayList<>();
+
+    public Quizz(
+            int id,
+            String name,
+            String description,
+            LocalDate creationDate,
+            LocalDate updateDate,
+            Boolean isActive,
+            Theme theme,
+            List<Question> questions,
+            List<Comment> comments
+    ) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -51,6 +63,7 @@ public class Quizz {
         this.isActive = isActive;
         this.theme = theme;
         this.questions = questions;
+        this.comments = comments;
     }
 
 }

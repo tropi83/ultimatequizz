@@ -1,9 +1,6 @@
 package design.ultimate_quizz.security.service.quizz;
 
-import design.ultimate_quizz.entities.Answer;
-import design.ultimate_quizz.entities.Question;
-import design.ultimate_quizz.entities.Quizz;
-import design.ultimate_quizz.entities.Theme;
+import design.ultimate_quizz.entities.*;
 import design.ultimate_quizz.repository.QuestionRepository;
 import design.ultimate_quizz.repository.QuizzRepository;
 import design.ultimate_quizz.repository.ThemeRepository;
@@ -16,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Slf4j
@@ -47,7 +41,7 @@ public class QuizzServiceImpl implements QuizzService {
 		final List<Question> quizzQuestions = quizzRequest.getQuestions();
 
 		final Theme theme = themeRepository.getOne(themeId);
-		final Quizz quizz = new Quizz(0, quizzName, quizzDescription, LocalDate.now(), LocalDate.now(), quizzIsActive, theme, quizzQuestions);
+		final Quizz quizz = new Quizz(0, quizzName, quizzDescription, LocalDate.now(), LocalDate.now(), quizzIsActive, theme, quizzQuestions, new ArrayList<Comment>());
 		quizzRepository.save(quizz);
 
 		for (Question question : quizzQuestions) {

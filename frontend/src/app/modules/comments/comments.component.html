@@ -1,0 +1,102 @@
+<!-- Comments -->
+<div *ngIf="quizz && quizz.comments" class="flex overflow-y-auto flex-col-reverse mb-4">
+    <div *ngFor="let comment of quizz.comments; let i = index; let first = first; let last = last; trackBy: trackByFn" class="flex items-start mt-6 ml-12">
+        <div
+            class="flex flex-col flex-auto shrink px-6 py-1 bg-card dark:bg-transparent"
+                [ngClass]= "{
+                    'items-end': comment.user.id == user?.id,
+                    'items-start': comment.user.id != user?.id,
+                    'mt-0.5': i > 0 && (quizz.comments[i - 1].user.id == user?.id) === (comment.user.id == user?.id),
+                    'mt-3': i > 0 && (quizz.comments[i - 1].user.id == user?.id) !== (comment.user.id == user?.id)
+                }"
+        >
+            <!-- Bubble -->
+            <div
+                class="relative max-w-3/4 px-3 py-2 rounded-lg"
+                [ngClass]="{
+                    'bg-blue-500 text-blue-50 mr-10': comment.user.id === user?.id,
+                    'bg-gray-500 text-gray-50 ml-10': comment.user.id !== user?.id
+                }"
+            >
+                <!-- Speech bubble tail -->
+                <ng-container >
+                    <div
+                        class="absolute bottom-0 w-3"
+                        [ngClass]="{
+                            'text-blue-500 -right-1 -mr-px mb-px': comment.user.id === user?.id,
+                            'text-gray-500 -left-1 -ml-px mb-px -scale-x-1': comment.user.id !== user?.id
+                        }"
+                    >
+                        <ng-container *ngTemplateOutlet="speechBubbleExtension"></ng-container>
+                    </div>
+                </ng-container>
+
+                <!-- Message -->
+                <div
+                    class="min-w-8 leading-5"
+                    [innerHTML]="comment.text">
+                </div>
+            </div>
+
+            <!-- User Info (No owner of comment) -->
+            <div *ngIf="comment.user.id !== user?.id" class="flex">
+
+                <div class="w-8 h-8 rounded-full mr-2">
+                    <div
+                        class="flex items-center justify-center w-full h-full rounded-full overflow-hidden uppercase font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                        *ngIf="comment && comment.user && comment.user.username">
+                        {{ comment.user.username.charAt(0) }}
+                    </div>
+                </div>
+                <span class="leading-8">
+                    <b>{{ comment && comment.user && comment.user.username ? comment.user.username : ''  }}</b>
+                </span>
+                <div
+                    class="my-0.5 text-sm font-medium text-secondary leading-8"
+                    [ngClass]="{
+                        'mr-3': comment.user.id === user?.id,
+                        'ml-3': comment.user.id !== user?.id
+                    }"
+                >
+                    {{ comment.creationDate | date: 'dd/MM/yyyy' }}
+                </div>
+            </div>
+
+            <!-- User Info (Is Owner) -->
+            <div *ngIf="comment.user.id === user?.id" class="flex">
+                <div
+                    class="my-0.5 text-sm font-medium text-secondary leading-8"
+                    [ngClass]="{
+                        'mr-3': comment.user.id === user?.id,
+                        'ml-3': comment.user.id !== user?.id
+                    }"
+                >
+                    {{ comment.creationDate | date: 'dd/MM/yyyy' }}
+                </div>
+                <span class="leading-8">
+                    <b>{{ comment && comment.user && comment.user.username ? comment.user.username : ''  }}</b>
+                </span>
+                <div class="w-8 h-8 rounded-full ml-2">
+                    <div
+                        class="flex items-center justify-center w-full h-full rounded-full overflow-hidden uppercase font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                        *ngIf="comment && comment.user && comment.user.username">
+                        {{ comment.user.username.charAt(0) }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Speech bubble tail SVG -->
+    <!-- @formatter:off -->
+    <ng-template #speechBubbleExtension>
+        <svg width="100%" height="100%" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <path d="M1.01522827,0.516204834 C-8.83532715,54.3062744 61.7609863,70.5215302 64.8009949,64.3061218 C68.8074951,54.8859711 30.1663208,52.9997559 37.5036011,0.516204834 L1.01522827,0.516204834 Z" fill="currentColor" fill-rule="nonzero"></path>
+            </g>
+        </svg>
+    </ng-template>
+    <!-- @formatter:on -->
+</div>

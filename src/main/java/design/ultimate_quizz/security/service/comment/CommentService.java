@@ -19,5 +19,7 @@ public interface CommentService {
 
     List<Comment> getCommentsByUser(Optional<User> user);
 
+    List<Comment> getCommentsByQuizz(Optional<Quizz> quizz);
+
     void deleteComment(int id);
 }

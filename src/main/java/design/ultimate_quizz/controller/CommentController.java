@@ -2,19 +2,18 @@ package design.ultimate_quizz.controller;
 
 
 import design.ultimate_quizz.entities.Comment;
+import design.ultimate_quizz.entities.Quizz;
 import design.ultimate_quizz.entities.User;
 import design.ultimate_quizz.security.dto.comment.CommentRequest;
 import design.ultimate_quizz.security.service.comment.CommentService;
+import design.ultimate_quizz.security.service.quizz.QuizzService;
 import design.ultimate_quizz.security.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +27,9 @@ public class CommentController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private QuizzService quizzService;
 
     @GetMapping("comments/{id}")
     public ResponseEntity<Comment> getComment(@PathVariable("id") int id)
@@ -52,6 +54,19 @@ public class CommentController {
         else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("comments/quizz/{id}")
+    public ResponseEntity<List<Comment>> getCommentsByQuizz(@PathVariable("id") int id){
+
+        Optional<Quizz> existQuizz = quizzService.getQuizzById(id);
+        if(existQuizz.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(this.commentService.getCommentsByQuizz(existQuizz));
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @PostMapping("comments")

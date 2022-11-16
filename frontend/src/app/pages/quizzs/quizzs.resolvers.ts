@@ -5,6 +5,7 @@ import { QuizzService } from "../../core/quizz/quizz.service";
 import { Quizz } from "../../core/quizz/quizz.models";
 import { ThemeService } from "../../core/theme/theme.service";
 import { Theme } from "../../core/theme/theme.types";
+import { HistoryService } from "../../core/history/history.service";
 
 
 @Injectable({
@@ -15,11 +16,10 @@ export class QuizzResolver implements Resolve<any>
     /**
      * Constructor
      */
-    constructor(private _quizzService: QuizzService,
-                private _router: Router
-    )
-    {
-    }
+    constructor(
+        private _quizzService: QuizzService,
+        private _router: Router
+    ){}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -79,6 +79,35 @@ export class QuizzThemesResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Theme[]>
     {
         return this._themeService.getAll();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class QuizzHistoryByUserResolver implements Resolve<any>
+{
+    /**
+     * Constructor
+     */
+    constructor(private _historyService: HistoryService)
+    {
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Resolver
+     *
+     * @param route
+     * @param state
+     */
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<History[]>
+    {
+        // @ts-ignore
+        return this._historyService.getAllByUserId();
     }
 }
 

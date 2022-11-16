@@ -58,8 +58,10 @@ export class QuizzService
 
     /**
      * Get all quizzs
+     *
+     * @param sort
      */
-    getAll(sort: string = 'asc'): Observable<Quizz[]>
+    getAll(sort: string = 'desc'): Observable<Quizz[]>
     {
         return this._httpClient.get<any>(environment.backendUrl + 'quizzs/' + sort).pipe(
             tap((quizzs) => {
@@ -78,7 +80,35 @@ export class QuizzService
     }
 
     /**
+     * Get all quizzs by theme
+     *
+     * @param themeId
+     */
+    getAllByTheme(themeId): Observable<Quizz[]>
+    {
+        if(themeId === 'all'){
+            return this.getAll();
+        }
+
+        return this._httpClient.get<any>(environment.backendUrl + 'quizzs/theme/' + themeId).pipe(
+            tap((quizzs) => {
+                if(quizzs) {
+                    quizzs.forEach(quizz => {
+                        let i = 1;
+                        quizz.questions.forEach(question => {
+                            question.position = i;
+                            i ++;
+                        });
+                    });
+                    this._quizzs.next(quizzs);
+                }
+            })
+        );
+    }
+
+    /**
      * Get all histories by User id and Quiz id
+     *
      * @param userId
      */
     getAllRealised(userId: string): Observable<Quizz[]>
@@ -101,95 +131,9 @@ export class QuizzService
 
 
     /**
-     * Get all quizzs order by like
-     */
-    getAllByLike(sort = 'desc'): Observable<Quizz[]>
-    {
-        return this._httpClient.get<any>(environment.backendUrl + 'Defis/Utilisateur/'  + this.user.id + '/Like/' + sort).pipe(
-            tap((quizzs) => {
-                if(quizzs) {
-                    this._quizzs.next(quizzs);
-
-                    return quizzs;
-                }
-            })
-        );
-    }
-
-    /**
-     * Like quizz
-     */
-    likeQuizz(quizz): Observable<Quizz>
-    {
-        return this.quizzs$.pipe(
-            take(1),
-            switchMap(quizzs =>
-                this._httpClient.post<any>(environment.backendUrl + 'like',
-                    {
-                        defiId  : quizz.id,
-                        utilisateurId  : this.user.id,
-                        }
-                ).pipe(
-                    map((response) => {
-                        if(response) {
-                            // Get the quizzs value
-                            const quizzs1 = this._quizzs.value;
-
-                            // Find the index of the updated quizz
-                            const indexQuizz = quizzs1.findIndex(item => item.id === quizz.id);
-
-                            // Update the like state
-                            quizzs1[indexQuizz].like = false;
-                            quizzs1[indexQuizz].likeId = response.id;
-
-                            // Update the quizz
-                            this._quizzs.next(quizzs1);
-
-                            return quizzs1;
-                        }else{
-                            return response;
-                        }
-                    })
-                ))
-        );
-    }
-
-    /**
-     * UnLike quizz
-     */
-    unlikeQuizz(quizz): Observable<Quizz>
-    {
-        return this.quizzs$.pipe(
-            take(1),
-            switchMap(quizzs =>
-                this._httpClient.delete<any>(environment.backendUrl + 'like/' + quizz.likeId,
-                ).pipe(
-                    map((response) => {
-
-                        if(response) {
-                            // Get the quizzs value
-                            const quizzs1 = this._quizzs.value;
-
-                            // Find the index of the updated quizz
-                            const indexQuizz = quizzs1.findIndex(item => item.id === quizz.id);
-
-                            // Update the like state
-                            quizzs1[indexQuizz].like = true;
-
-                            // Update the quizz
-                            this._quizzs.next(quizzs1);
-
-                            return quizzs1;
-                        }else{
-                            return response;
-                        }
-                    })
-                ))
-        );
-    }
-
-    /**
-     * Realised quizz
+     * Realised quizz (Add history)
+     *
+     * @param quizz
      */
     realisedQuizz(quizz): Observable<Quizz>
     {
@@ -228,17 +172,21 @@ export class QuizzService
 
     /**
      * Create comment
+     *
+     * @param text
+     * @param userId
+     * @param quizzId
      */
-    createComment(text: string, quizzId :string): Observable<Quizz>
+    createComment(text: string, userId :string, quizzId :string): Observable<Comment>
     {
         return this.quizzs$.pipe(
             take(1),
-            switchMap(quizzs =>
+            switchMap(comments =>
                 this._httpClient.post<any>(environment.backendUrl + 'comments',
                     {
                         text          : text,
-                        defiId        : quizzId,
-                        utilisateurId : this.user.id,
+                        user_id       : this.user.id,
+                        quizz_id      : quizzId
                         }
                 ).pipe(
                     map((response) => {
@@ -252,13 +200,7 @@ export class QuizzService
                             const indexQuizz = quizzs1.findIndex(item => item.id === quizzId);
 
                             // Update the comments
-                            quizzs1[indexQuizz].comments.push(response);
-
-                            // Update the quizz
-                            this._quizzs.next(quizzs1);
-
-                            // Update the quizzs with the new quizz
-                            this._quizzs.next([response, ...quizzs]);
+                            quizzs1[indexQuizz].comments.unshift(response);
 
                             // Return the new quizz from observable
                             return response;

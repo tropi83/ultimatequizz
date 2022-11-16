@@ -12,14 +12,14 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
-import {MAT_DATE_LOCALE} from "@angular/material/core";
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
-import {ErrorInterceptor} from "./modules/error/error.interceptor";
-import {registerLocaleData} from "@angular/common";
-import {environment} from "../environments/environment";
+import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { ErrorInterceptor } from "./modules/error/error.interceptor";
+import { registerLocaleData } from "@angular/common";
+import { environment } from "../environments/environment";
 import fr from '@angular/common/locales/fr';
 import * as Sentry from '@sentry/browser';
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 registerLocaleData(fr);
 

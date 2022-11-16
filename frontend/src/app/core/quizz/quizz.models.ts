@@ -1,6 +1,6 @@
 import { Comment } from "../comment/comment.types";
 import { Question } from "../question/question.types";
-import {Theme} from "../theme/theme.types";
+import { Theme } from "../theme/theme.types";
 
 // -----------------------------------------------------------------------------------------------------
 // @ Quizz

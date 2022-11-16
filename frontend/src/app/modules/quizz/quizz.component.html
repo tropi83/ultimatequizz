@@ -36,7 +36,6 @@
                 </div>
                 <div class="flex items-center mt-4">
                     <mat-icon
-
                         class="icon-size-5 mr-3"
                         [svgIcon]="'iconsmind:trophy'"></mat-icon>
                     <span class="leading-none">{{ quizz && quizz.like ? quizz.like + ' points' : '0 points' }}</span>
@@ -44,8 +43,8 @@
                 <div class="flex items-center mt-4">
                     <mat-icon
                         class="icon-size-5 mr-3"
-                        [svgIcon]="'heroicons_solid:thumb-up'"></mat-icon>
-                    <span class="leading-none">{{ quizz && quizz.like ? quizz.like + ' likes' : '0 like' }}</span>
+                        [svgIcon]="'heroicons_solid:chat-alt'"></mat-icon>
+                    <span class="leading-none">{{ quizz && quizz.comments && quizz.comments.length > 1 ? quizz.comments.length + ' commentaires' : '0 commentaires' }}</span>
                 </div>
                 <div class="flex items-center mt-4 border-b pb-4">
                     <mat-icon
@@ -62,40 +61,18 @@
                 Score: {{ points }}
             </button>
             <button
-                *ngIf="quizzIsStarted && progress === 100"
+                *ngIf="quizzIsStarted === false || quizzIsStarted && progress === 100"
                 class="px-6 mt-8"
                 mat-flat-button
                 [color]="'accent-300'"
                 (click)=" showBestHistory(); ">
                 <mat-icon
                     class="icon-size-5 mr-2"
-                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                    [svgIcon]="'iconsmind:trophy'"></mat-icon>
                 Meilleurs scores
             </button>
             <button
-                *ngIf="quizzIsStarted === false"
-                class="px-6 mt-8"
-                mat-flat-button
-                [color]="'accent-300'"
-                (click)=" showBestHistory(); ">
-                <mat-icon
-                    class="icon-size-5 mr-2"
-                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
-                Meilleurs scores
-            </button>
-            <button
-                *ngIf="quizzIsStarted && progress === 100"
-                class="px-6 mt-8"
-                mat-flat-button
-                [color]="'accent-300'"
-                (click)=" showHistory(); ">
-                <mat-icon
-                    class="icon-size-5 mr-2"
-                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
-                Voir mon historique
-            </button>
-            <button
-                *ngIf="quizzIsStarted === false"
+                *ngIf="quizzIsStarted === false || quizzIsStarted && progress === 100"
                 class="px-6 mt-8"
                 mat-flat-button
                 [color]="'accent-300'"

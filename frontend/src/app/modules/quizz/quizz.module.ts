@@ -16,7 +16,8 @@ import { quizzRoutes } from 'app/pages/quizzs/quizzs.routing';
 import { UserModule } from "../../layout/common/user/user.module";
 import { FuseAlertModule } from "../../../@fuse/components/alert";
 import { FuseConfirmationModule } from "../../../@fuse/services/confirmation";
-import {ProgressBarModule} from "../progress-bar/progress-bar.module";
+import { ProgressBarModule } from "../progress-bar/progress-bar.module";
+import { CommentsModule } from "../comments/comments.module";
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import {ProgressBarModule} from "../progress-bar/progress-bar.module";
         UserModule,
         FuseAlertModule,
         FuseConfirmationModule,
-        ProgressBarModule
+        ProgressBarModule,
+        CommentsModule
     ]
 })
 export class QuizzModule
