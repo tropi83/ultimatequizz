@@ -146,7 +146,6 @@ export class AuthService
         );
     }
 
-
     /**
      * Sign out
      */

@@ -329,6 +329,9 @@ export class QuizzComponent implements OnInit, AfterViewInit{
         this.success = true;
         this.progress = 0;
 
+        this.startTimer();
+        this._changeDetectorRef.markForCheck();
+
         this.setAnswers();
         this._changeDetectorRef.markForCheck();
 

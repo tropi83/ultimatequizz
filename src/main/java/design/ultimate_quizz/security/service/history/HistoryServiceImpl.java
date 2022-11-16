@@ -35,15 +35,7 @@ public class HistoryServiceImpl implements HistoryService {
 
 		final Quizz quizz = quizzRepository.getOne(quizzId);
 		final User user = userRepository.getOne(userId);
-
 		final History history = new History(0, LocalDate.now(), user, quizz, points, time);
-
-		log.info("{} -------------------------- !", history.getId());
-		log.info("{} -------------------------- !", history.getCreationDate());
-		log.info("{} -------------------------- !", history.getPoints());
-		log.info("{} -------------------------- !", history.getTime());
-		log.info("{} -------------------------- !", history.getQuizz());
-		log.info("{} -------------------------- !", history.getUser());
 
 		historyRepository.save(history);
 

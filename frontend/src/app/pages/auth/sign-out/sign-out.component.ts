@@ -42,8 +42,9 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
         // Redirect after the countdown
         timer(1000, 1000)
             .pipe(
-                finalize(() => {
-                    this._router.navigate(['quizzs']);
+                finalize(async () => {
+                    await this._router.navigate(['quizzs']);
+                    location.reload();
                 }),
                 takeWhile(() => this.countdown > 0),
                 takeUntil(this._unsubscribeAll),

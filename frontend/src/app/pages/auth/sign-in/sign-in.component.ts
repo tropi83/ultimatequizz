@@ -93,7 +93,7 @@ export class AuthSignInComponent implements OnInit
                 (error) => {
                     let errorMessage = error.error || error.statusText || 'Une erreur est survenue. Veuillez re-essayer plus tard.';
 
-                    if(error && error.error && error.error.error && error.error.error === 'Unauthorized') {
+                    if(error && error.error && error.error.message && error.error.message === "Bad credentials") {
                         errorMessage = 'Mauvais nom d\'utilisateur ou mot de passe';
                     }
                     else if(error.error && error.status){
@@ -107,7 +107,6 @@ export class AuthSignInComponent implements OnInit
                         type   : 'error',
                         message: errorMessage
                     };
-
 
                     // Re-enable the form
                     this.signInForm.enable();

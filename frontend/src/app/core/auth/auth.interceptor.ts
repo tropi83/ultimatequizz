@@ -56,14 +56,14 @@ export class AuthInterceptor implements HttpInterceptor
                     // Sign out
                     this._authService.signOut();
 
-                    this._flashService.warn('Deconnexion');
+                    this._flashService.warn('Déconnexion');
 
                 }
 
                 // Catch "403 Forbidden" responses
                 if ( error instanceof HttpErrorResponse && error.status === 403 )
                 {
-                    const errorMessage = error.error.error || error.statusText;
+                    const errorMessage = error.error.message || error.statusText;
 
                     if(errorMessage === "Inactive user."){
                         this._flashService.error('Erreur ' + error.status + ': Utilisateur désactivé.');

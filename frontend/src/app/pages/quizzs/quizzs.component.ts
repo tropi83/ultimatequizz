@@ -47,6 +47,7 @@ export class QuizzsComponent
         query$        : new BehaviorSubject(''),
         hideCompleted$: new BehaviorSubject(false)
     };
+    selectedTheme: Theme;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     commentForm: FormGroup;
@@ -110,16 +111,18 @@ export class QuizzsComponent
 
                 this.historyByUser = histories;
 
-                this.quizzs.forEach(quizz => {
-                    let i = 0;
-                    this.historyByUser.forEach(history => {
-                        if (quizz.id === history.quizz.id) {
-                            i = i + 1;
-                            quizz.nbQuizzPlayed = i;
-                        }
+                // Set nb of played for each quizz
+                if(this.quizzs && this.quizzs.length > 0 && this.historyByUser && this.historyByUser.length > 0) {
+                    this.quizzs.forEach(quizz => {
+                        let i = 0;
+                        this.historyByUser.forEach(history => {
+                            if (quizz.id === history.quizz.id) {
+                                i = i + 1;
+                                quizz.nbQuizzPlayed = i;
+                            }
+                        });
                     });
-                });
-
+                }
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
@@ -394,26 +397,6 @@ export class QuizzsComponent
     }
 
     /**
-     * Play/ add history quizz
-     */
-    playQuizz(quizz){
-
-        this._quizzService.playQuizz(quizz)
-            .subscribe(
-                () => {
-                    quizz.realise = true;
-                },
-                (error) => {
-                    quizz.realise = false;
-                },()=>{
-
-                    // Mark for check
-                    this._changeDetectorRef.markForCheck();
-                }
-            );
-    }
-
-    /**
      * Create comment
      */
     createComment(): void
@@ -552,6 +535,7 @@ export class QuizzsComponent
     {
         this.isLoading = true;
         if(change.value){
+            this.selectedTheme = this.themes.find(theme => theme.id == change.value);
             this._quizzService.getAllByTheme(change.value)
                 .subscribe(
                     (quizzs) => {

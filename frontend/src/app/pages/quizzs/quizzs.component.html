@@ -39,15 +39,18 @@
             </div>
 
             <!-- Separator -->
-            <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+            <div *ngIf="user !== undefined" class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+
+            <div *ngIf="user === undefined" class="mr-1"></div>
 
             <!-- Stats Quizz created -->
             <div class="flex items-center mt-2 lg:mt-0 space-x-6">
                 <div class="flex flex-col items-center">
                     <span class="font-bold">{{ quizzs && quizzs.length }}</span>
-                    <span class="text-sm font-medium text-secondary">Quizzs crées</span>
+                    <span *ngIf="this.filters.themeName$.value === 'all'" class="text-sm font-medium text-secondary">Quizzs totals</span>
+                    <span *ngIf="this.filters.themeName$.value !== 'all'" class="text-sm font-medium text-secondary">Quizzs {{ selectedTheme?.name }}</span>
                 </div>
-                <div class="flex flex-col items-center">
+                <div *ngIf="user != undefined" class="flex flex-col items-center">
                     <span class="font-bold">{{ historyByUser && historyByUser.length }}</span>
                     <span class="text-sm font-medium text-secondary">Quizzs joués</span>
                 </div>
@@ -73,6 +76,10 @@
                         Derniers
                     </span>
                 </button>
+
+                <!-- Separator -->
+                <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+
                 <button
                     (click)="getOldest();"
                     class="px-3 mr-1 -ml-2 sm:ml-0"
@@ -90,6 +97,10 @@
                         Les plus vieux
                     </span>
                 </button>
+
+                <!-- Separator -->
+                <div *ngIf="user !== undefined;" class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+
                 <button
                     (click)="getAllPlayed();"
                     class="px-3 mr-1 -ml-2 sm:ml-0"
@@ -126,7 +137,7 @@
             <div *ngIf="user">
                 <fuse-card class="flex flex-col max-w-80 w-full mt-6 p-8 shadow rounded-2xl bg-white dark:bg-opacity-5 dark:border"
                        #expandableCard02="fuseCard">
-                <div class="text-2xl font-semibold leading-tight">Profile</div>
+                <div class="text-2xl font-semibold leading-tight">Profil</div>
 
                 <!-- User description -->
                 <div [innerHTML]="user && user.description ? user.description : ''  " class="mt-4"></div>
@@ -162,7 +173,7 @@
                     mat-flat-button
                     [color]="'primary'"
                     [routerLink]="['./']">
-                    Voir le profile
+                    Voir le profil
                 </button>
             </fuse-card>
             </div>
