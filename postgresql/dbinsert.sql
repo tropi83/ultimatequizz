@@ -324,4 +324,8 @@ INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-0
 INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Le thème ne correspond pas vraiment aux questions.', 1, 7);
 INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Super !', 3, 8);
 INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', 'J''aime les sandwitchs à la fraise !', 1, 10);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-12', 'Sympa !', 4, 8);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-14', 'Absurde...', 4, 3);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-16', 'Dingue !', 1, 10);
+INSERT INTO comments (creation_date, text, quizz_id, user_id) VALUES ('2022-11-18', 'Rarement fait mieux !', 4, 8);
 

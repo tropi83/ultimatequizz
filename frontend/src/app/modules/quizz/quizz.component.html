@@ -38,13 +38,13 @@
                     <mat-icon
                         class="icon-size-5 mr-3"
                         [svgIcon]="'iconsmind:trophy'"></mat-icon>
-                    <span class="leading-none">{{ quizz && quizz.like ? quizz.like + ' points' : '0 points' }}</span>
+                    <span class="leading-none">{{ bestPointsHistory && bestPointsHistory > 0 ? bestPointsHistory + ' points' : '0 point' }}</span>
                 </div>
                 <div class="flex items-center mt-4">
                     <mat-icon
                         class="icon-size-5 mr-3"
                         [svgIcon]="'heroicons_solid:chat-alt'"></mat-icon>
-                    <span class="leading-none">{{ quizz && quizz.comments && quizz.comments.length > 1 ? quizz.comments.length + ' commentaires' : '0 commentaires' }}</span>
+                    <span class="leading-none">{{ quizz && quizz.comments && quizz.comments.length > 1 ? quizz.comments.length + ' commentaires' : '0 commentaire' }}</span>
                 </div>
                 <div class="flex items-center mt-4 border-b pb-4">
                     <mat-icon
@@ -55,14 +55,14 @@
             </div>
             <button
                 *ngIf="quizzIsStarted"
-                class="px-6 mt-8"
+                class="px-6 mt-6"
                 mat-flat-button
                 [color]="'primary'">
                 Score: {{ points }}
             </button>
             <button
                 *ngIf="quizzIsStarted === false || quizzIsStarted && progress === 100"
-                class="px-6 mt-8"
+                class="px-6 mt-6"
                 mat-flat-button
                 [color]="'accent-300'"
                 (click)=" showBestHistory(); ">
@@ -73,13 +73,13 @@
             </button>
             <button
                 *ngIf="(quizzIsStarted === false && user !== undefined) || (quizzIsStarted && progress === 100 && user !== undefined)"
-                class="px-6 mt-8"
+                class="px-6 mt-6"
                 mat-flat-button
                 [color]="'accent-300'"
                 (click)=" showHistory(); ">
                 <mat-icon
                     class="icon-size-5 mr-2"
-                    [svgIcon]="'heroicons_solid:save'"></mat-icon>
+                    [svgIcon]="'heroicons_solid:book-open'"></mat-icon>
                 Voir mon historique
             </button>
             <button

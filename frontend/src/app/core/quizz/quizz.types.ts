@@ -14,7 +14,7 @@ export interface Quizz
     likeId: string;
     realise: boolean;
     realiseId: string;
-    nbRealise: number;
+    nbQuizzPlayed?: number;
     questions: Question[];
 }
 

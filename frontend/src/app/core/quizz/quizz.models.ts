@@ -17,7 +17,7 @@ export class Quizz
     likeId: string;
     realise: boolean;
     realiseId: string;
-    nbRealise: number;
+    nbQuizzPlayed: number;
     questions: Question[];
 
     /**
@@ -34,7 +34,7 @@ export class Quizz
         likeId,
         realise,
         realiseId,
-        nbRealise,
+        nbQuizzPlayed,
         questions: Question[]
     )
     {
@@ -49,7 +49,7 @@ export class Quizz
         this.like = like || null;
         this.realise = realise || null;
         this.realiseId = realiseId || null;
-        this.nbRealise = nbRealise || null;
+        this.nbQuizzPlayed = nbQuizzPlayed || null;
         this.questions = questions || null;
     }
 }

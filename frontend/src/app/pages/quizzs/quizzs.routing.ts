@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { QuizzsComponent } from 'app/pages/quizzs/quizzs.component';
-import { QuizzResolver, QuizzThemesResolver } from "./quizzs.resolvers";
+import { QuizzHistoryByUserResolver, QuizzResolver, QuizzThemesResolver } from "./quizzs.resolvers";
 
 export const quizzRoutes: Route[] = [
     {
@@ -9,6 +9,7 @@ export const quizzRoutes: Route[] = [
         resolve  : {
             quizzs: QuizzResolver,
             themes: QuizzThemesResolver,
+            historyByUser: QuizzHistoryByUserResolver,
         },
     }
 ];

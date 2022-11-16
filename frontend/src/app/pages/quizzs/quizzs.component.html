@@ -44,12 +44,12 @@
             <!-- Stats Quizz created -->
             <div class="flex items-center mt-2 lg:mt-0 space-x-6">
                 <div class="flex flex-col items-center">
-                    <span class="font-bold">200k</span>
+                    <span class="font-bold">{{ quizzs && quizzs.length }}</span>
                     <span class="text-sm font-medium text-secondary">Quizzs crées</span>
                 </div>
                 <div class="flex flex-col items-center">
-                    <span class="font-bold">1.2k</span>
-                    <span class="text-sm font-medium text-secondary">Quizzs réalisés</span>
+                    <span class="font-bold">{{ historyByUser && historyByUser.length }}</span>
+                    <span class="text-sm font-medium text-secondary">Quizzs joués</span>
                 </div>
             </div>
 
@@ -91,20 +91,20 @@
                     </span>
                 </button>
                 <button
-                    (click)="getAllRealised();"
+                    (click)="getAllPlayed();"
                     class="px-3 mr-1 -ml-2 sm:ml-0"
                     mat-button>
-                    <span *ngIf="selectedQuizzMode === 'realised' && user !== undefined;" class="flex sm:items-center font-medium cursor-pointer">
+                    <span *ngIf="selectedQuizzMode === 'played' && user !== undefined;" class="flex sm:items-center font-medium cursor-pointer">
                         <mat-icon
                             class="icon-size-5 mr-3 leading-6 text-primary"
-                            [svgIcon]="'heroicons_solid:save'"></mat-icon>
-                        Réalisés
+                            [svgIcon]="'heroicons_solid:book-open'"></mat-icon>
+                        Quizzs joués
                     </span>
-                    <span *ngIf="selectedQuizzMode !== 'realised' && user !== undefined;" class="flex sm:items-center text-secondary cursor-pointer">
+                    <span *ngIf="selectedQuizzMode !== 'played' && user !== undefined;" class="flex sm:items-center text-secondary cursor-pointer">
                         <mat-icon
                             class="icon-size-5 mr-3 leading-6"
-                            [svgIcon]="'heroicons_solid:save'"></mat-icon>
-                        Réalisés
+                            [svgIcon]="'heroicons_solid:book-open'"></mat-icon>
+                        Quizzs joués
                     </span>
                 </button>
             </div>
@@ -181,11 +181,17 @@
                         [value]="'all'"
                         (selectionChange)="filterByTheme($event)">
                         <mat-option [value]="'all'">
-                            <mat-icon
-                                class="icon-size-5 flex w-1/3" style="padding-top: 15px;"
-                                matPrefix
-                                [svgIcon]="'heroicons_solid:tag'"></mat-icon>
-                            Tous
+                            <div class="flex">
+                                <mat-icon
+                                    class="icon-size-5 flex w-1/3" style="padding-top: 15px;"
+                                    matPrefix
+                                    [svgIcon]="'heroicons_solid:tag'"></mat-icon>
+                                <div class="w-2/3">
+                                    <span class="font-medium">
+                                        Tous
+                                    </span>
+                                </div>
+                            </div>
                         </mat-option>
                         <ng-container *ngFor="let theme of themes; trackBy: trackByFn">
                             <mat-option [value]="theme.id">
@@ -309,16 +315,6 @@
                             </button>
                         </div>
 
-                        <button *ngIf="quizz && quizz.realise === false"
-                                (click)="realisedQuizz(quizz)"
-                                class="px-3 mr-1"
-                                mat-button
-                                [routerLink]="['./']">
-                            <mat-icon
-                                class="icon-size-5 mr-2"
-                                [svgIcon]="'heroicons_solid:x'"></mat-icon>
-                            <span>Pas encore réalisé</span>
-                        </button>
                     </div>
                     <hr class="border-b mx-6 sm:mx-8 mt-4 mb-6">
                     <div class="flex flex-col sm:flex-row sm:items-center mx-6 sm:mx-8 mb-4 sm:mb-6">
@@ -340,9 +336,9 @@
                                 class="px-3 mr-1 -ml-2 sm:ml-0"
                                 mat-button>
                                 <span class="font-medium mr-1">
-                                    {{ quizz && quizz.nbRealise ? quizz.nbRealise : '0 ' }}
+                                    {{ quizz && quizz.nbQuizzPlayed ? quizz.nbQuizzPlayed : '0 ' }}
                                 </span>
-                                fois réalisé
+                                fois joué
                             </button>
 
                             <button *ngIf="quizz && quizz.comments && quizz.comments.length !== 0; else NoCommentsBlock"
@@ -448,7 +444,6 @@
             [user]="user"
             (gameMode)=onBackFromQuizzGame($event)
             (gameIsStarted)=onQuizStartedStateChange($event)>
-
         </app-quizz>
     </ng-template>
 </div>

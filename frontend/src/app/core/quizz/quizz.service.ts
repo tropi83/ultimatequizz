@@ -66,13 +66,23 @@ export class QuizzService
         return this._httpClient.get<any>(environment.backendUrl + 'quizzs/' + sort).pipe(
             tap((quizzs) => {
                 if(quizzs) {
+
                     quizzs.forEach(quizz => {
+                        // add position to questions
                         let i = 1;
                         quizz.questions.forEach(question => {
                             question.position = i;
                             i ++;
                         });
+
+                        // sort comments by date desc
+                        quizz.comments.sort((a, b) => {
+                            const fieldA = a['creationDate'].toString().toUpperCase();
+                            const fieldB = b['creationDate'].toString().toUpperCase();
+                            return fieldB.localeCompare(fieldA);
+                        });
                     });
+
                     this._quizzs.next(quizzs);
                 }
             })
@@ -94,10 +104,18 @@ export class QuizzService
             tap((quizzs) => {
                 if(quizzs) {
                     quizzs.forEach(quizz => {
+                        // add position to questions
                         let i = 1;
                         quizz.questions.forEach(question => {
                             question.position = i;
                             i ++;
+                        });
+
+                        // sort comments by date desc
+                        quizz.comments.sort((a, b) => {
+                            const fieldA = a['creationDate'].toString().toUpperCase();
+                            const fieldB = b['creationDate'].toString().toUpperCase();
+                            return fieldB.localeCompare(fieldA);
                         });
                     });
                     this._quizzs.next(quizzs);
@@ -111,7 +129,7 @@ export class QuizzService
      *
      * @param userId
      */
-    getAllRealised(userId: string): Observable<Quizz[]>
+    getAllPlayed(userId: string): Observable<Quizz[]>
     {
         return this._httpClient.get<any>(environment.backendUrl + 'histories/user/'  + userId).pipe(
             tap((histories) => {
@@ -121,6 +139,22 @@ export class QuizzService
                         quizzs.push(history.quizz);
                     })
 
+                    quizzs.forEach(quizz => {
+                        // add position to questions
+                        let i = 1;
+                        quizz.questions.forEach(question => {
+                            question.position = i;
+                            i ++;
+                        });
+
+                        // sort comments by date desc
+                        quizz.comments.sort((a, b) => {
+                            const fieldA = a['creationDate'].toString().toUpperCase();
+                            const fieldB = b['creationDate'].toString().toUpperCase();
+                            return fieldB.localeCompare(fieldA);
+                        });
+                    });
+
                     this._quizzs.next(quizzs);
 
                     return quizzs;
@@ -129,13 +163,12 @@ export class QuizzService
         );
     }
 
-
     /**
-     * Realised quizz (Add history)
+     * Play quizz (Add history)
      *
      * @param quizz
      */
-    realisedQuizz(quizz): Observable<Quizz>
+    playQuizz(quizz): Observable<Quizz>
     {
         return this.quizzs$.pipe(
             take(1),
@@ -209,6 +242,5 @@ export class QuizzService
                 ))
         );
     }
-
 
 }

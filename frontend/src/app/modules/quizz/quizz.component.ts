@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 import { QuizzService } from "../../core/quizz/quizz.service";
 import { HistoryService } from "../../core/history/history.service";
 import { Quizz } from "../../core/quizz/quizz.models";
+import { History } from "../../core/history/history.models";
 import { Question } from "../../core/question/question.models";
 import { Answer } from "../../core/answer/answer.types";
 import { FuseConfirmationService } from "../../../@fuse/services/confirmation";
@@ -51,6 +52,9 @@ export class QuizzComponent implements OnInit, AfterViewInit{
     savedOriginalQuestion: Question;
     savedOriginalQuestions: Question[];
 
+    historiesOfQuizz: History[];
+    bestPointsHistory: number = 0;
+
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private elementRef: ElementRef,
@@ -63,13 +67,34 @@ export class QuizzComponent implements OnInit, AfterViewInit{
     ) { }
 
     ngOnInit() {
-        this.question = this.quizz.questions[0];
-        this.questions = this.quizz.questions;
 
-        this.savedOriginalQuestion = this.quizz.questions[0];
-        this.savedOriginalQuestions = this.quizz.questions;
-        this.setAnswers();
-        this._changeDetectorRef.markForCheck();
+        // Setup quizz game
+        if (this.quizz && this.quizz.questions && this.quizz.questions.length > 0 ) {
+            this.question = this.quizz.questions[0];
+            this.questions = this.quizz.questions;
+            this.savedOriginalQuestion = this.quizz.questions[0];
+            this.savedOriginalQuestions = this.quizz.questions;
+            this.setAnswers();
+            this._changeDetectorRef.markForCheck();
+        }
+
+        // Get histories for this quizz
+        this.historyService.getAllByQuizzId(this.quizz.id)
+            .subscribe(
+                (histories: History[]) => {
+
+                    if (histories && histories.length > 0) {
+                        histories.sort((a, b) =>  b['points'] - a['points']);
+                        this.bestPointsHistory = histories[0].points;
+                    }
+
+                    this.historiesOfQuizz = histories;
+                    this._changeDetectorRef.markForCheck();
+
+                },
+                (error) => {},
+                () => {}
+            );
     }
 
     ngAfterViewInit() {
@@ -375,9 +400,10 @@ export class QuizzComponent implements OnInit, AfterViewInit{
                         isHistory       : true,
                         historiesData   : histories,
                         dismissible     : true,
+                        isBestHistory   : true,
                         icon       : {
                             show : true,
-                            name : 'heroicons_solid:archive',
+                            name : 'iconsmind:trophy',
                             color: 'primary'
                         },
                         actions    : {

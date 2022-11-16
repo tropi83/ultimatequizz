@@ -79,12 +79,30 @@
                         </div>
 
                         <!-- BODY TABLE -->
-                        <div *ngFor="let history of data.historiesData">
+                        <div *ngFor="let history of data.historiesData; let i = index;">
 
                             <div class="grid grid-flow-row auto-rows-fr lg:grid-flow-col lg:auto-cols-fr divide-y lg:divide-y-0 lg:divide-x border-b pb-2">
 
-                                <!-- Date -->
-                                <div class="flex items-center justify-center p-4" style="min-width: 140px;">
+                                <!-- Best histories Trophy icon -->
+                                <div *ngIf="data.isBestHistory" class="items-center justify-center p-4" style="min-width: 140px;">
+                                    <mat-icon *ngIf="i === 0"
+                                        class="text-yellow-500 dark:text-yellow-500 icon-size-6 mr-3"
+                                        [svgIcon]="'iconsmind:trophy'"></mat-icon>
+                                    <mat-icon *ngIf="i === 1"
+                                        class="icon-size-6 mr-3"
+                                        [svgIcon]="'iconsmind:trophy'"></mat-icon>
+                                    <mat-icon *ngIf="i === 2"
+                                        class="text-orange-700 icon-size-6 mr-3"
+                                        [svgIcon]="'iconsmind:trophy'"></mat-icon>
+
+                                    <div class="items-center justify-center mt-1" style="margin-left: -10px;" >
+                                        {{ history?.user?.username }}
+                                    </div>
+
+                                </div>
+
+                                <!-- NO Best histories -->
+                                <div *ngIf="!data.isBestHistory" class="flex items-center justify-center p-4" style="min-width: 140px;">
                                 </div>
 
                                 <!-- Date -->

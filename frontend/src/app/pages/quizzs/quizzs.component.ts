@@ -5,6 +5,7 @@ import { User } from "../../core/user/user.model";
 import { FormBuilder, FormGroup, NgForm, Validators } from "@angular/forms";
 import { QuizzService } from "../../core/quizz/quizz.service";
 import { Quizz } from "../../core/quizz/quizz.models";
+import { History } from "../../core/history/history.models";
 import { FuseAlertType } from "../../../@fuse/components/alert";
 import { FuseConfirmationService } from "../../../@fuse/services/confirmation";
 import { MatSelectChange } from "@angular/material/select";
@@ -53,9 +54,10 @@ export class QuizzsComponent
     themes: Theme[];
     user: User;
     quizzs: Quizz[];
+    historyByUser: History[];
 
     selectedQuizz: Quizz;
-    selectedQuizzMode: 'latest' | 'oldest' | 'realised' = 'latest';
+    selectedQuizzMode: 'latest' | 'oldest' | 'played' = 'latest';
 
     /* todo remove */
     gameMode: boolean = false;
@@ -96,6 +98,27 @@ export class QuizzsComponent
 
                 /* todo remove */
                 this.selectedQuizz = quizzs[0];
+
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
+            });
+
+        // Subscribe to quizzs history by user changes
+        this._historyService.historiesByUser$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((histories: History[]) => {
+
+                this.historyByUser = histories;
+
+                this.quizzs.forEach(quizz => {
+                    let i = 0;
+                    this.historyByUser.forEach(history => {
+                        if (quizz.id === history.quizz.id) {
+                            i = i + 1;
+                            quizz.nbQuizzPlayed = i;
+                        }
+                    });
+                });
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
@@ -296,9 +319,9 @@ export class QuizzsComponent
     }
 
     /**
-     * Get all quizz realised/history
+     * Get all quizz played/history
      */
-    getAllRealised(){
+    getAllPlayed(){
 
         this.isLoading = true;
         this.filters.themeName$.next('all');
@@ -335,9 +358,9 @@ export class QuizzsComponent
                 {
                     this.gameMode = false;
                     this.gameIsStarted = false;
-                    this.selectedQuizzMode = "realised";
+                    this.selectedQuizzMode = "played";
 
-                    this._quizzService.getAllRealised(this.user.id)
+                    this._quizzService.getAllPlayed(this.user.id)
                         .subscribe(
                             () => {
                                 this.isLoading = false;
@@ -354,9 +377,9 @@ export class QuizzsComponent
         } else {
             this.gameMode = false;
             this.gameIsStarted = false;
-            this.selectedQuizzMode = "realised";
+            this.selectedQuizzMode = "played";
 
-            this._quizzService.getAllRealised(this.user.id)
+            this._quizzService.getAllPlayed(this.user.id)
                 .subscribe(
                     () => {
                         this.isLoading = false;
@@ -371,11 +394,11 @@ export class QuizzsComponent
     }
 
     /**
-     * Realised/ add history quizz
+     * Play/ add history quizz
      */
-    realisedQuizz(quizz){
+    playQuizz(quizz){
 
-        this._quizzService.realisedQuizz(quizz)
+        this._quizzService.playQuizz(quizz)
             .subscribe(
                 () => {
                     quizz.realise = true;
@@ -578,8 +601,8 @@ export class QuizzsComponent
                             }
                         );
                 }
-                else if (this.selectedQuizzMode === "realised") {
-                    this._quizzService.getAllRealised(this.user.id)
+                else if (this.selectedQuizzMode === "played") {
+                    this._quizzService.getAllPlayed(this.user.id)
                         .subscribe(
                             () => {
                                 this.isLoading = false;

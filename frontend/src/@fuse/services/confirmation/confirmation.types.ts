@@ -25,4 +25,5 @@ export interface FuseConfirmationConfig
     height?: string;
     isHistory?: boolean;
     historiesData?: any[];
+    isBestHistory?: boolean;
 }

@@ -16,7 +16,6 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(catchError(err => {
-            console.log(err)
             if ([0, 400, 404, 422, 500, 502].indexOf(err.status) !== -1) {
 
                 if (err.status === 0){
@@ -27,7 +26,6 @@ export class ErrorInterceptor implements HttpInterceptor {
                     this._router.navigate(['500']).then();
 
                 } else if(err.status === 400){
-                    console.log(err)
                     const errors = err.error.message || err.statusText;
                     this._flashService.warn(errors);
 
