@@ -5,6 +5,9 @@
 [![Angular Logo](https://www.vectorlogo.zone/logos/angular/angular-icon.svg)](https://angular.io/)
 
 ## Introduction
+
+Périmètre de l'application:
+
 - Proposer au joueur de répondre à des questions.
 - Il devra choisir parmi 4 réponses possibles.
 - Chaque bonne réponse lui fait gagner 1 point.
