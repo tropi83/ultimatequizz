@@ -13,18 +13,32 @@ export const defaultNavigation: FuseNavigationItem[] = [
 
 export const futuristicNavigation: FuseNavigationItem[] = [
     {
-        id: 'admin_copc',
+        id: 'admin_ultimate_quizz',
         title: 'ADMINISTRATION ULTIMATE QUIZZ',
         subtitle: '',
         type: 'group',
         icon: 'heroicons_outline:document',
         children: [
             {
-                id: 'copc',
+                id: 'ultimate_quizz',
                 title: 'Accueil',
                 type: 'basic',
                 icon: 'heroicons_solid:home',
-                link: '/copc',
+                link: '/quizzs',
+            },
+            {
+                id: 'theme',
+                title: 'Themes',
+                type: 'basic',
+                icon: 'heroicons_solid:tag',
+                link: '/admin/themes/list',
+            },
+            {
+                id: 'users',
+                title: 'Utilisateurs',
+                type: 'basic',
+                icon: 'heroicons_solid:user',
+                link: '/admin/users/list',
             },
         ]
     }

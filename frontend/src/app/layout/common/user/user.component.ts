@@ -97,6 +97,6 @@ export class UserComponent implements OnInit, OnDestroy
      */
     redirectToAdmin(): void
     {
-        this._router.navigate(['/admin', this.user.id]);
+        this._router.navigate(['/admin/users/list']);
     }
 }

@@ -79,7 +79,8 @@ export const appRoutes: Route[] = [
             initialData: InitialDataResolver,
         },
         children   : [
-
+            {path: 'admin/themes', loadChildren: () => import('app/modules/admin/themes/themes.module').then(m => m.ThemesModule)},
+            {path: 'admin/users', loadChildren: () => import('app/modules/admin/users/users.module').then(m => m.UsersModule)},
         ]
     },
     {path: '**', redirectTo: '404'}

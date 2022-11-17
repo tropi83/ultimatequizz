@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {map, Observable, of, ReplaySubject, tap, throwError} from 'rxjs';
+import {catchError, map, Observable, of, ReplaySubject, switchMap, tap, throwError} from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import {environment} from "../../../environments/environment";
 
@@ -45,22 +45,42 @@ export class UserService
     /**
      * Get the current logged in user data
      */
-    get(): Observable<User>
+    get(): Observable<any>
     {
         let token = localStorage.getItem('accessToken');
-        return this._httpClient.get<any>(environment.backendUrl + '/login' + token).pipe(
-            tap((response) => {
 
-                    if(response.user) {
-                        this._user.next(response.data.user);
-
-                    }else{
-                        this._user.error('User not found');
-                    }
-            },
-            (error) => {
-                this._user.error(error);
+        // Renew token
+        return this._httpClient.post(environment.backendUrl + 'check-authentication/' ,
+            {
+                token: token
             })
-        );
+            .pipe(
+                catchError((err) =>
+
+                    // Return false
+                    of(false)
+                ),
+                switchMap((response: any) => {
+
+                    if (response) {
+                        if (response.token) {
+
+                            if(response.user) {
+                                this._user.next(response.user);
+
+                            }else{
+                                this._user.error('User not found');
+                            }
+
+                            // Return true
+                            return of(true);
+                        }
+                    }else{
+                        // Return true
+                        return of(false);
+                    }
+
+                })
+            );
     }
 }

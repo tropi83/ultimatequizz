@@ -1,0 +1,221 @@
+
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Title -->
+    <div class=" ml-6 mt-3 text-4xl font-extrabold tracking-tight sm:justify-between px-2 md:px-2 ">Thèmes</div>
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-4 px-2 md:px-2 border-b">
+
+        <!-- Main actions -->
+        <div class="w-3/4 items-center ml-6 mt-2 mb-2 sm:mt-0 md:mt-2">
+            <!-- Search -->
+                <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                    <mat-icon
+                        class="icon-size-5"
+                        matPrefix
+                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input
+                        matInput
+                        [formControl]="searchInputControl"
+                        [autocomplete]="'off'"
+                        [placeholder]="'Chercher par identifiant ou nom'">
+                </mat-form-field>
+        </div>
+        <!-- Add theme button -->
+        <div class="w-1/4 ml-3 mt-2 mb-2 sm:mt-0 md:mt-2 text-center">
+            <button
+                class="custom-button-create-margin-left"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="createTheme()">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1 md:p-1">Créer</span>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+        <!-- Themes list -->
+        <div  class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container #scrollBottom *ngIf="(themes$ | async) as themes">
+                <ng-container *ngIf="themes && themes.length && themes.length > 0; else noThemes">
+                    <div class="grid">
+                        <!-- Header -->
+                        <div
+                            class="theme-grid z-10 sticky top-0 grid gap-3 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black"
+                            matSort
+                            matSortDisableClear>
+                            <div [mat-sort-header]="'id'">Identifiant</div>
+
+                            <div [mat-sort-header]="'name'">Nom</div>
+
+                            <div>Détails</div>
+                        </div>
+                        <!-- Rows -->
+                        <ng-container *ngIf="(themes$ | async) as themes">
+                            <ng-container *ngFor="let theme of themes; trackBy: trackByFn">
+                                <div class="theme-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                    <!-- Id -->
+                                    <div class="">
+                                        <div
+                                            [ngClass]="{
+                                                    'w-10 h-10 text-sm': theme?.id?.toString().length === null,
+                                                    'w-10 h-10 text-sm': theme?.id?.toString().length <= 5,
+                                                    'w-12 h-12 text-xs': theme?.id?.toString().length >= 6
+                                                    }"
+                                            class="flex flex-0 items-center justify-center rounded-full overflow-hidden">
+                                            <ng-container>
+                                                <div class="flex items-center justify-center w-full h-full rounded-full uppercase bg-white text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                    #{{ theme?.id }}
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+
+                                    <!-- Name -->
+                                    <div class="truncate font-medium">
+                                        {{ theme?.name }}
+                                    </div>
+
+                                    <!-- Details button -->
+                                    <div>
+                                        <button
+                                            class="min-w-10 min-h-7 h-7 px-2 leading-6"
+                                            mat-stroked-button
+                                            (click)="toggleDetails(theme?.id)">
+                                            <mat-icon
+                                                class="icon-size-5"
+                                                [svgIcon]="selectedTheme?.id === theme.id ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'"></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <ng-container *ngIf="selectedTheme?.id === theme.id">
+                                        <ng-container *ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: theme}"></ng-container>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+
+                    <mat-paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}"
+                        [length]="pagination && pagination.length ? pagination.length: 0"
+                        [pageIndex]="pagination && pagination.page ? pagination.page: 0 "
+                        [pageSize]="pagination && pagination.size ? pagination.size: 0 "
+                        [pageSizeOptions]="[5, 10, 25, 100]"
+                        [showFirstLastButtons]="true"></mat-paginator>
+
+                </ng-container>
+            </ng-container>
+
+            <!-- Selected theme form -->
+            <ng-template
+                #rowDetailsTemplate
+                let-theme>
+                <div class="shadow-lg overflow-hidden bg-accent-200 dark:bg-accent-800" style="-webkit-box-shadow: 0px 0px 2px 0px #4f46e5 !important; box-shadow: 0px 0px 2px 0px #4f46e5!important;">
+
+                <div class="flex border-b">
+
+                        <form
+                            class="flex flex-col w-full"
+                            [formGroup]="selectedThemeForm">
+
+                            <div class="flex flex-col sm:flex-row p-8">
+
+                                <div class="flex flex-auto flex-wrap" >
+
+                                    <div class="flex w-full">
+                                        <!-- Id -->
+                                        <div class="w-1/2">
+                                            <div class="flex flex-auto flex-wrap w-full sm:pl-8">
+                                                <label>Identifiant:</label>
+                                            </div>
+                                            <div class="flex flex-auto flex-wrap w-full sm:pl-8 mt-2" >
+                                                <div class="flex flex-0 items-center justify-center w-14 h-14 rounded-full overflow-hidden">
+                                                    <ng-container>
+                                                        <div class="flex items-center justify-center w-full h-full rounded-full uppercase bg-white text-gray-600 dark:bg-gray-700 dark:text-gray-200 text-sm">
+                                                            #{{selectedTheme?.id}}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Name -->
+                                    <div class="flex flex-col w-full lg:w-2/4 sm:pl-8" >
+                                        <mat-form-field class="w-full mt-5" >
+                                            <mat-label>Nom:</mat-label>
+                                            <input matInput [formControlName]="'name'">
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex items-center justify-between w-full border-t px-8 py-4">
+                                <a
+                                    class="-ml-4"
+                                    mat-button
+                                    [color]="'warn'"
+                                    (click)="deleteSelectedTheme()">
+                                    <mat-icon
+                                        class="icon-size-6 pr-2"
+                                        matPrefix
+                                        [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                    Supprimer
+                                </a>
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex items-center mr-4"
+                                        *ngIf="flashMessage">
+                                        <ng-container *ngIf="flashMessage === 'success'">
+                                            <mat-icon
+                                                class="text-green-500"
+                                                [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                                            <span class="ml-2">Thème mise à jour</span>
+                                        </ng-container>
+                                        <ng-container *ngIf="flashMessage === 'error'">
+                                            <mat-icon
+                                                class="text-red-500"
+                                                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            <span class="ml-2">Une erreur est survenue. Essayer ultérieurement</span>
+                                        </ng-container>
+                                    </div>
+
+                                    <a
+                                        mat-flat-button
+                                        [color]="'primary'"
+                                        (click)="updateSelectedTheme()">
+                                        <mat-icon
+                                            class="icon-size-6 pr-2"
+                                            matPrefix
+                                            [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+                                        Mettre à jour
+                                    </a>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #noThemes>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Il n'y a pas de themes</div>
+            </ng-template>
+
+        </div>
+
+    </div>
+
+</div>

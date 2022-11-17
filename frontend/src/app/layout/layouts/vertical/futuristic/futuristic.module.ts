@@ -11,7 +11,7 @@ import { FuseNavigationModule } from '@fuse/components/navigation';
 import { UserModule } from 'app/layout/common/user/user.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { FuturisticLayoutComponent } from 'app/layout/layouts/vertical/futuristic/futuristic.component';
-import {SettingsModule} from "../../../common/settings/settings.module";
+import { SettingsModule } from "../../../common/settings/settings.module";
 
 @NgModule({
     declarations: [
